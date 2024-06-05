@@ -2,7 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import React, {useRef,useState,useEffect} from "react";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-
+import {Buffer} from 'buffer';
 import Features from './components/features/index'
 import Products from './components/products/index'
 import InvestTable from "./components/investTable"
@@ -15,7 +15,7 @@ import InvestTable from "./components/investTable"
 
 // import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
 // import { DEX, pTON } from '@ston-fi/sdk';
-import TonWeb from 'tonweb';
+// import TonWeb from 'tonweb';
 
 const selector = [
   { type: 'Earn',
