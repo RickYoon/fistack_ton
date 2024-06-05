@@ -1,0 +1,50 @@
+{
+  "hashed-Ozys (Klaystation)": {
+    "wdMethod": "스왑 / 7일 후 수령",
+    "category": "Node-Staking"
+  },
+  "Kokoa Finance": {
+    "wdMethod": "7일 후 수령",
+    "category": "Lending"
+  },
+  "Kleva": {
+    "wdMethod": "즉시인출",
+    "category": "Lending"
+  },
+  "Klayswap": {
+    "wdMethod": "즉시인출",
+    "category": "Lending"
+  },
+  "Jump (Klaystation)": {
+    "wdMethod": "7일 후 수령",
+    "category": "Node-Staking"
+  },
+  "Klaymore stakehouse": {
+    "wdMethod": "즉시인출 / 스왑 / 7일 후 수령",
+    "category": "Node-Staking"
+  },
+  "Stake.ly": {
+    "wdMethod": "스왑 / 7일 후 수령",
+    "category": "Node-Staking"
+  },
+  "Klaybank": {
+    "wdMethod": "즉시인출",
+    "category": "Lending"
+  },
+  "FSN (Klaystation)": {
+    "wdMethod": "7일 후 수령",
+    "category": "Node-Staking"
+  },
+  "BiFi": {
+    "wdMethod": "즉시인출",
+    "category": "Lending"
+  },
+  "Hankyung (Klaystation)": {
+    "wdMethod": "7일 후 수령",
+    "category": "Node-Staking"
+  },
+  "Swapscanner": {
+    "wdMethod": "스왑 / 7일 후 수령 / NFT 변환",
+    "category": "Node-Staking"
+  }
+}
