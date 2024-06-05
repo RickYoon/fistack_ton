@@ -167,14 +167,19 @@ const metamaskDepositExecutor = async (accountAddress, targetContract, amount) =
     const web3Return = await web3.eth
     .sendTransaction(transactionInfo)
     .once('transactionHash', (transactionHash) => {
-      console.log('txHash', transactionHash);
       Toast.fire({
         icon: 'success',
-        title: '예치 신청이 성공적으로 완료되었습니다.',
+        title: 'Transaction success',
+        html: `<a href=https://scope.klaytn.com/tx/${transactionHash} target="_blank">detail</a>`
       })
     })
     .once('receipt', (receipt) => {
         console.log('receipt', receipt);
+        Toast.fire({
+            icon: 'success',
+            title: 'Deposit success',
+            html: `<a href=https://scope.klaytn.com/tx/${receipt.transactionHash} target="_blank">detail</a>`
+          })        
     })
     .once('error', (error) => {
         console.log('error', error);

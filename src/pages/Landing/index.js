@@ -5,168 +5,73 @@ import axios from 'axios';
 
 import Features from './components/features/index'
 import Products from './components/products/index'
-import KlayStakingTable from "./components/klayStakingTable"
-import StableLendTable from "./components/stableLendTable"
+import InvestTable from "./components/investTable"
+// import StableLendTable from "./components/stableLendTable"
 
-import klaytnLogo from "../../assets/ci/klaytn-logo.png"
-import wemixLogo from "../../assets/ci/wemix-icon.png"
-import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
+// import { TonClient, TonClient4 } from "@ton/ton";
+// import { getHttpEndpoint, getHttpV4Endpoint } from "@orbs-network/ton-access";
+
+// import { StormSDK } from "@storm-trade/sdk";
+
+// import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
+// import { DEX, pTON } from '@ston-fi/sdk';
 import TonWeb from 'tonweb';
-import { DEX, pTON } from '@ston-fi/sdk';
 
 const selector = [
   { type: 'Earn',
-    token: "KLAY"
-  },
-  { type: 'Borrow',
-    token: "STABLE" }
+    token: "USDT"
+  }
 ]
-
-
-const dex = new DEX.v1.Router({
-  tonApiClient: new TonWeb.HttpProvider(),
-});
-
-
 
 
 function Landing() {
 
-  const navigate = useNavigate();
+  // const dex = new DEX.v1.Router({
+  //   tonApiClient: new TonWeb.HttpProvider(),
+  // });
 
-  const [select, setSelect] = useState(selector[0])
-
-  const [klaystaking, setKlaystaking] = useState([{
-      "poolName": "Klaymore stakehouse",
+  const [investList, setInvestList] = useState([{
+      "poolName": "This",
       "klayAmount": 19634899.511379745,
       "apr": 5.265849838582299,
-      "type": "node-staking",
+      "type": "Lending",
       "klayTVL": 3966249.7012987086
   }])
 
+
+
   const homeRef = useRef(null);
-  
-  const handleButtonClick = () => {
-    navigate('/products');
-  };
 
   useEffect(() => {
-    updateAsset()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
   }, [])
 
+  async function storm(){
+      // Init mainnet jUSDT SDK with ton client:
+      // const sdk = StormSDK.asMainnetJUSDT();
 
-  async function updateAsset () {
-    
-    const assetList = await axios.get(`https://nyzomcdsf8.execute-api.ap-northeast-2.amazonaws.com/production/linkryptopoolinfos`)
-    
-    const resultArray = convertAndSort(assetList.data.body.klayStakingPool);
+      // // Get full assets list
+      // const assetsList = await sdk.getAssets();
+      // console.log("assetsList", assetsList);
 
-    setKlaystaking(resultArray.slice(0,5))
-
+      // // Get markets for a given vault
+      // const marketList = await sdk.getMarkets();
+      // console.log("marketList", marketList);
   }
-
-
-  function convertAndSort(poolData) {
-    const poolArray = Object.entries(poolData).map(([poolName, data]) => ({
-        poolName,
-        klayAmount: data.klayAmount,
-        apr: data.apr,
-        type : data.type,
-        klayTVL : data.klayTVL
-    }));
-
-    poolArray.sort((a, b) => b.apr - a.apr);
-
-    return poolArray;
-  }
-
-  const [investedAsset, setInvestedAsset] = useState({
-    "isInvested": false,
-    "totalInvested": 0,
-    "totalDailyIncome": 0,
-    "totalApr": 0,
-    "klayInvestedinKlay": 0,
-    "klayInvestedinKRW": 0,
-    "klayDailyIncomeKlay": 0,
-    "klayDailyIncomeKRW": 0,
-    "KlayTotalApr": 0,
-    "investCategory": {
-        "klayStaking": 0,
-        "ousdtStaking": 0
-    },
-    "klayStaking": {
-        "Min": 0,
-        "Max": 0,
-        "balance": 0
-    },
-    "ousdtStaking": {
-        "Min": 0,
-        "Max": 0,
-        "balance": 0
-    },
-    "klayAprStatus": {
-      "myStatus": 0,
-      "maxApr": 0
-    },
-    "klayProtocolCategorySummary":[
-      {"":0},{"":0}
-    ],
-    "klayProtocolCategory": [
-      {
-        "poolName": "hashed-Ozys (Klaystation)",
-        "category": "노드 스테이킹",
-        "investedKLAY": 0,
-        "tvlKLAY": 0,
-        "tvlKRW": 0,
-        "apr":0,
-        "liqToken": "sKLAY",
-        "unStakingOption": [
-            "스왑",
-            "7일대기"
-        ]
-      }
-  ]
-})
-
-  useEffect(() => {
-
-    console.log("select",select)
-
-  }, [select])
-  
 
   return (
     <>
-
-    <Heading props={homeRef}/>
-    <Features />
-
-    <div class="bg-gray-50 py-20 sm:py-20" ref={homeRef}>
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-4xl lg:text-center">
-        
-          <Products select={select} setSelect={setSelect}/>
-          {select.type === "Earn" ?
-            <KlayStakingTable data={klaystaking}/>
-            :
-            <StableLendTable data={investedAsset} />
-          }
-
-          <button onClick={handleButtonClick} type="button" className="cursor-pointer text-black ml-1 bg-white hover:bg-gray-100 border border-gray-200 hover:bg-blue-100 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center">
-          ... show all
-          </button>
-        <div style={{height:"12px"}} />
-        <hr />
+      <Heading props={homeRef}/>
+      <Features />
+      <div class="bg-gray-50 py-20 sm:py-20" ref={homeRef}>
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-4xl lg:text-center">
+            <Products />
+            <InvestTable data={investList}/>
+            <div style={{height:"12px"}} />
+          </div>
         </div>
       </div>
-    </div>
-
-    
-
-
-    {/* <Footer /> */}
-
     </>
   );
 }
@@ -178,22 +83,22 @@ function Heading (props) {
   // console.log("props", props.props)
   const navigate = useNavigate();
 
-  const onHomeClick = () => {
-    navigate("/products")
-  };
+  // const onHomeClick = () => {
+  //   navigate("/products")
+  // };
 
-  const [tonConnectUI, setOptions] = useTonConnectUI();
-  const wallet = useTonAddress();
+  // const [tonConnectUI, setOptions] = useTonConnectUI();
+  // const wallet = useTonAddress();
 
-  const transaction = {
-    messages: [
-        {
-            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F",
-            amount: "20000000" 
-        }
-    ]
+//   const transaction = {
+//     messages: [
+//         {
+//             address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F",
+//             amount: "20000000" 
+//         }
+//     ]
 
-}
+// }
 
 
   return (
@@ -214,7 +119,7 @@ function Heading (props) {
         for <br /> Crypto Investors
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
-      Enhance profits easily while minimizing risks
+      Enhance profits with us
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
       {/* <button className="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900"
@@ -250,23 +155,15 @@ function Heading (props) {
     >
       Swap 1 TON to STON
     </button> */}
-        {/* <a
+        <a
           className="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900"
           variant="solid"
           color="slate"
-          href="/portfolio"
+          href="/products"
         >
-          Manage Assets
-        </a> */}
-        {/* <button
-          className="group inline-flex ring-1 items-center justify-center rounded-full py-2 px-4 text-sm focus:outline-none ring-slate-200 text-slate-700 hover:text-slate-900 hover:ring-slate-300 active:bg-slate-100 active:text-slate-600 focus-visible:outline-blue-600 focus-visible:ring-slate-300"
-          onClick={onHomeClick}
-        >
-          <svg aria-hidden="true" className="h-3 w-3 flex-none fill-blue-600 group-active:fill-current">
-            <path d="m9.997 6.91-7.583 3.447A1 1 0 0 1 1 9.447V2.553a1 1 0 0 1 1.414-.91L9.997 5.09c.782.355.782 1.465 0 1.82Z"></path>
-          </svg>
-          <span className="ml-3">Find Investment</span>
-        </button> */}
+          Find Investment
+        </a>
+
       </div>
       <div className="mt-20 lg:mt-30">
         <p className="font-display text-base text-slate-900">Supported Chain</p>
@@ -276,11 +173,7 @@ function Heading (props) {
               <LogoNetwork target="_blank" class="logo-network" href="https://ethereum.org" title="https://ethereum.org" rel="noreferrer"><img src={"https://seeklogo.com/images/T/toncoin-ton-logo-DBE22B2DFB-seeklogo.com.png"} alt="Klaytn" style={{width:"60px", borderRadius:"50%"}}/><span class="logo_label font-normal text-gray-500">Ton</span></LogoNetwork>
             </ul>
           </li>
-          {/* <li>
-            <ul role="list" className="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0">
-              <LogoNetwork target="_blank" class="logo-network" href="https://ethereum.org" title="https://ethereum.org" rel="noreferrer"><img src={wemixLogo} alt="Klaytn" style={{width:"60px", borderRadius:"50%"}}/><span class="logo_label font-normal text-gray-500">Wemix 3.0</span></LogoNetwork>
-            </ul>
-          </li> */}
+
         </ul>
       </div>
     </div>

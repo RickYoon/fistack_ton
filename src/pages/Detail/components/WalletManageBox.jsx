@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import icons from "assets/tokenIcons"
 import styled from 'styled-components';
 
-function WalletManageBox() {
+function WalletManageBox({title}) {
 
 
   const Backbutton = () => {
@@ -13,7 +13,7 @@ function WalletManageBox() {
     };
     return (
       <button onClick={onClickBtn} class="inline-flex items-center px-4 py-2 text-sm font-medium border border-blue-200 text-center text-blue-500 bg-white rounded-lg hover:bg-blue-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-      돌아가기
+      Back
       </button>
     )
   }
@@ -23,12 +23,32 @@ function WalletManageBox() {
         <div className="md:flex md:justify-between md:items-center p-3 mb-3">
 
             <div class="flex flex-row" style={{fontSize:"20px"}}>
-                <Img src={icons["Klaybank"]} alt="logo" /> 
-                <div style={{marginLeft:"12px"}}>Klaybank</div>
+              {title === "Swapscanner" ? 
+                <Img src={icons["swapscanner"]} alt="logo" />                 
+                :title === "FSN (Klaystation)" ? 
+                <Img src={icons["Klaystation"]} alt="logo" />        
+                :title === "Jump-EverStake (Klaystation)" ? 
+                <Img src={icons["Klaystation"]} alt="logo" />        
+                :title === "Ozys (Klaystation)" ? 
+                <Img src={icons["Klaystation"]} alt="logo" />        
+                :title === "Hankyung (Klaystation)" ? 
+                <Img src={icons["Klaystation"]} alt="logo" />        
+                :title === "klaybank" ? 
+                <Img src={icons["Klaybank"]} alt="logo" />        
+                :title === "kokoa finance" ? 
+                <Img src={icons["Kokoa"]} alt="logo" />        
+                :
+                <Img src={icons[title]} alt="logo" /> 
+                }
+                <div style={{marginLeft:"12px"}}>{title}</div>
             </div>
 
-            <div class="grid place-items-center">
+            
 
+            
+
+            <div class="grid place-items-center">
+            
             <Backbutton />
             
         </div>            

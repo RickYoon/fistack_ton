@@ -1,5 +1,7 @@
-# SUIstack
+# fistack
 
-## Yield and Data aggregator service for investors in sui
+## DeFi toolkit for investors
 
-**Copyright (c) 2023 PureValley Labs**
+## ton hackerton
+
+**Copyright (c) 2024 PureValley Labs**

@@ -10,10 +10,8 @@ import { useParams } from "react-router-dom";
 
 const people = [
   { type: 'Earn',
-    token: "klay"
-  },
-  { type: 'Borrow',
-    token: "stable" }
+    token: "USDT"
+  }
 ]
 
 function Products({ select, setSelect }) {

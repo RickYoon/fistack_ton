@@ -43,6 +43,10 @@ const kaikasKlayDepositExecutor = async (accountAddress, targetContract, amount)
         case '0x7087d5a9e3203d39ec825d02d92f66ed3203b18a': // 7 - kokoa       
             transactionInfo = await kokoaKaikasDeposit(userAddress, protocolAddress, depositAmount)
             break;
+        case '0xf80f2b22932fcec6189b9153aa18662b15cc9c00': // 8 - stakely
+            transactionInfo = await stakelyKaikasDeposit(userAddress, protocolAddress, depositAmount)
+            break;
+
         default:
             console.log(`Sorry, we are out of ${protocolAddress}.`);
     }
@@ -58,15 +62,15 @@ const kaikasKlayDepositExecutor = async (accountAddress, targetContract, amount)
         console.log('txHash', transactionHash);
         Toast.fire({
             icon: 'success',
-            title: '예치 신청이 성공적으로 완료되었습니다.',
-          })
-      })
+            title: 'Transaction success',
+            html: `<a href=https://scope.klaytn.com/tx/${transactionHash} target="_blank">detail</a>`
+          })})
       .once('receipt', (receipt) => {
           console.log('receipt', receipt);
         })
       .once('error', (error) => {
           console.log('error', error);
-          alert("지불에 실패하셨습니다.");
+          alert("Transaction Fail");
       })
 
       return web3Return
@@ -423,6 +427,25 @@ async function klaystationDeposit (addr, contAddr, amount) {
         value: transAmount,
         gas: 800000
     }
+}
+
+
+async function stakelyKaikasDeposit (addr, contAddr, amount) {
+
+    const abi = {name: 'stake',type: 'function', inputs: []}
+    const inputArray = []
+
+    const data = window.caver.klay.abi.encodeFunctionCall(abi, inputArray)      
+
+      return {
+        type: 'SMART_CONTRACT_EXECUTION',
+        from: addr,
+        to: contAddr,
+        data,
+        value: window.caver.utils.toPeb(amount.toString(), 'KLAY'),
+        gas: 800000
+    }
+
 }
 
 async function stakelyDeposit (addr, contAddr, amount) {
