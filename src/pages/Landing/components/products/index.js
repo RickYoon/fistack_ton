@@ -88,7 +88,7 @@ function Products({ select, setSelect }) {
                           EEVA
                         </div>
                       </div>  
-                      <div className="text-base text-neutral-800">24.35%</div>
+                      <div className="text-base text-neutral-800">22.61%</div>
 
                     </div>                  
                   </Link>
@@ -117,7 +117,7 @@ function Products({ select, setSelect }) {
                           Storm Trade
                         </div>
                       </div>
-                      <div className="text-base text-neutral-800">24.35%</div>
+                      <div className="text-base text-neutral-800">63.35%</div>
   
                     </div>                  
                   </Link>
@@ -151,7 +151,38 @@ function Products({ select, setSelect }) {
                           StonFi
                         </div>
                       </div>  
-                      <div className="text-base text-neutral-800">92.35%</div>
+                      <div className="text-base text-neutral-800">96.15%</div>
+                    </div>                  
+                  </Link>
+                </div>
+
+                <div className="border border-gray-200 rounded-lg p-5 bg-white mt-5">
+                  <Link to="/detail/0xae78736Cd615f374D3085123A210448E74Fc6393">
+                    <div className="flex justify-evenly">
+                      <div className="flex">
+                      <div className="relative">
+                          <div className="relative mr-1.5 rounded-full bg-white">
+                            <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                            <img src={"https://ton.org/download/ton_symbol.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="relative mr-1.5 rounded-full bg-white">
+                          <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                          <img src={"https://static-00.iconduck.com/assets.00/tether-cryptocurrency-icon-2048x2048-dp13oydi.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex flex-row items-center">
+                          <p className="mx-4 text-base font-bold text-neutral-800">LP farming</p>
+                        </div>
+                        <div className="flex text-sm mx-4">
+                          DeDust
+                        </div>
+                      </div>  
+                      <div className="text-base text-neutral-800">117.35%</div>
                     </div>                  
                   </Link>
                 </div>
@@ -182,7 +213,7 @@ function Products({ select, setSelect }) {
                           StonFi + Storm
                         </div>
                       </div>  
-                      <p className="text-base text-neutral-800">42.35%</p>
+                      <p className="text-base text-neutral-800">66.21%</p>
                     </div>                  
                   </Link>
                 </div>

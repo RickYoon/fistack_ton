@@ -25,6 +25,20 @@ function DetailStaking() {
   const [depositAmount, setDepositAmount] = useState(NaN)
   const [withdrawalAmount, setWithdrawalAmount] = useState(NaN)
 
+
+  const [deltaAmount, setDeltaAmount] = useState(0);
+  const [longAmount, setLongAmount] = useState(0);
+  const [shortAmount, setShortAmount] = useState(0);
+
+  useEffect(() => {
+
+    setLongAmount(deltaAmount/7.2*(2/3))
+    setShortAmount(shortAmount/3/7)
+
+  }, [deltaAmount])
+
+  
+
   const [detailAsset, setDetailAsset] = useState({
     "poolName": "",
     "category": "",
@@ -163,7 +177,7 @@ function DetailStaking() {
                       <div className="flex flex-col">
                         <div className="flex items-center">
                           <p className="mx-4 text-base font-bold text-neutral-800">Lend USDT</p>
-                          <p className="text-base text-neutral-800">24.35%</p>
+                          <p className="text-base text-neutral-800">22.61%</p>
                         </div>
                         <div className="flex text-sm mx-4">
                           EEVA
@@ -175,8 +189,12 @@ function DetailStaking() {
             <div className="mt-2">
             <div className="flex flex-col gap-2 w-full pt-3">
               <div className="grid grid-cols-[1fr_3fr] gap-3">
-                <p className="font-semibold text-center">Balance</p>
+                <p className="font-semibold">Balance</p>
                 <p className="text-neutral-600 text-left">98.1 USDT</p>
+              </div>              
+              <div className="grid grid-cols-[1fr_3fr] gap-3">
+                <p className="font-semibold">Invested</p>
+                <p className="text-neutral-600 text-left">0 USDT</p>
               </div>              
             </div>
             </div>
@@ -336,7 +354,7 @@ function DetailStaking() {
                           StonFi + Storm
                         </div>
                       </div>  
-                      <p className="text-base text-neutral-800">42.35%</p>
+                      <p className="text-base text-neutral-800">66.21%</p>
                     </div>                  
 
                     <div className="mt-2">
@@ -349,7 +367,41 @@ function DetailStaking() {
                     </div>
 
                   </button>
-                </div>      
+                </div>   
+
+                <div className="border border-gray-100 rounded-lg p-4 bg-white mt-5">
+
+              
+              <div class="items-center">   
+                                
+                  <div class="relative w-full">
+                  <div class="pb-5">Investment Amount</div>              
+                      
+                      {selection === "deposit" ? 
+                      <>
+                        <div class="relative">
+                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            </div>
+                            <input type="number" value={deltaAmount} onChange={e => setDeltaAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.availableToken}`} required  />
+                            <button onClick={maxDepositHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                        </div>
+                      </>
+                      :
+                      <>
+                        <div class="relative">
+                          <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                          </div>
+                          <input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.investedToken}`} required />
+                            <button onClick={maxWithdrawerHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                          </div>
+                      </>
+                    }
+                  </div>              
+              </div>
+
+            </div>
+                
+                   
               <div style={{marginTop:"20px"}}></div>
               <div className="border border-gray-100 rounded-lg p-5" style={{"backgroundColor":"white"}}>
               <div style={{marginTop:"10px"}}></div>
@@ -367,8 +419,7 @@ function DetailStaking() {
                         <div class="relative">
                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                             </div>
-                            <input type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.availableToken}`} required  />
-                            <button onClick={maxDepositHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                            Swap {deltaAmount*(2/3)} USDT to {longAmount.toFixed(2)} TON
                         </div>
                       </>
                       :
@@ -377,7 +428,7 @@ function DetailStaking() {
                           <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                           </div>
                           <input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.investedToken}`} required />
-                            <button onClick={maxWithdrawerHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                            {/* <button onClick={maxWithdrawerHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button> */}
                           </div>
                       </>
                     }
@@ -398,7 +449,7 @@ function DetailStaking() {
                     true ?
                     <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                       <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
-                        Swap USDT to tsTon
+                        Confirm
                       </span>
                     </button>
                     :
@@ -415,7 +466,7 @@ function DetailStaking() {
           <div className="border border-gray-100 rounded-lg p-5 mt-3" style={{"backgroundColor":"white"}}>
               <div style={{marginTop:"10px"}}></div>
 
-              <div>Short Position (Funding Apr : 38%)</div>              
+              <div>2x Short Position (Funding Apr : 38%)</div>              
 
           <div style={{marginTop:"20px"}}></div>
               <div className="pt-1">
@@ -427,9 +478,8 @@ function DetailStaking() {
                       <>
                         <div class="relative">
                             <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                            </div>
-                            <input type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.availableToken}`} required  />
-                            <button onClick={maxDepositHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                            </div>  
+                            Short {longAmount.toFixed(2)} Ton with {deltaAmount*(1/3)} USDT
                         </div>
                       </>
                       :
@@ -438,7 +488,7 @@ function DetailStaking() {
                           <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                           </div>
                           <input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.investedToken}`} required />
-                            <button onClick={maxWithdrawerHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                            {/* <button onClick={maxWithdrawerHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button> */}
                           </div>
                       </>
                     }
@@ -459,7 +509,7 @@ function DetailStaking() {
                     true ?
                     <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                       <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
-                      Short TON with USDT
+                      Confirm
                       </span>
                     </button>
                     :
@@ -556,12 +606,13 @@ const DeltaNeutralStrategy = () => {
     <div className="bg-white p-6 rounded-lg border border-gray-100 mx-auto">
       <h2 className="text-xl font-bold text-center mb-4">Delta Neutral Position Strategy</h2>
       <p className="text-base mb-2">
-        Taking advantage of funding fee opportunities in <span className="font-bold">TON Coin</span>.
+        Taking advantage of funding fee opportunities in <span className="font-bold">TON</span> <br/>
       </p>
       <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
         <ol className="list-decimal list-inside">
           <li className="mb-2">
-            Converting your <span className="font-bold">USDT</span> to <span className="font-bold">TON</span> on <span className="font-bold">Ston.fi DEX</span> (going long on TON).
+            Converting your <span className="font-bold">USDT</span> to <span className="font-bold">TON</span> on <span className="font-bold">Ston.fi DEX.</span> 
+            (This means Long Position).
           </li>
           <li className="mb-2">
             Simultaneously, shorting an equivalent amount of <span className="font-bold">TON</span> on <span className="font-bold">Storm Trade PerpDEX</span> using <span className="font-bold">USDT</span>.
