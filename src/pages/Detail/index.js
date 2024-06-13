@@ -127,10 +127,9 @@ function DetailStaking() {
 
   return (
     <>
-
-      <div class="bg-gray-50 h-screen">
+    {id === "0xae78736Cd615f374D3085123A210448E74Fc6393" ?
+        <div class="bg-gray-50 h-screen">
         <div class="p-4">
-
         <div>
         <div class="p-4">
           <OverBox>
@@ -146,8 +145,8 @@ function DetailStaking() {
             <div style={{marginTop:"20px"}}></div>
               <div class="sm:px-0">        
               <div className="border border-gray-100 rounded-lg p-6 bg-white">
-          <button className="flex flex-col">
-          <button className="flex flex-col">
+                <button className="flex flex-col">
+                  <button className="flex flex-col">
                     <div className="flex items-center">
                       <div className="flex">
                         <div className="relative">
@@ -178,12 +177,8 @@ function DetailStaking() {
               <div className="grid grid-cols-[1fr_3fr] gap-3">
                 <p className="font-semibold text-center">Balance</p>
                 <p className="text-neutral-600 text-left">98.1 USDT</p>
-              </div>
-              <div className="grid grid-cols-[1fr_3fr] gap-3">
-                <p className="font-semibold text-left">Invested</p>
-                <p className="text-neutral-600 text-left">0 USDT</p>
-              </div>
-              </div>
+              </div>              
+            </div>
             </div>
 
           </button>
@@ -282,23 +277,15 @@ function DetailStaking() {
           <div class="pt-6"></div>
           </div>
 
-          <div className="border border-gray-100 rounded-lg p-6 bg-white">
-            <div>
-              How Does it work?
-            </div>
-            <div class="pt-3">
-              When you login to fistack and deposit into the USDT Lending Earn Strategy, 
-              you will be investing your USDT into a EVAA Lending Contract.              
-              EVAA pays to deposits in the USDT Supply Rate the shown APY continuously on every block. 
-              You can deposit as much as you want and withdraw at any moment. 
-              There are no lock-ups and no fees for using.
-            </div>
-
-            
-
-                  
-          </div>
-
+          <div className="bg-white p-6 border border-gray-100 rounded-lg mx-auto">
+      <h2 className="text-xl font-bold text-center mb-4">How Does it Work?</h2>
+      <p className="text-base mb-2">
+       Deposit into the <span className="font-bold">USDT Lending Earn Strategy</span>, you will be investing your <span className="font-bold">USDT</span> into a <span className="font-bold">EVAA Lending Contract</span>.
+      </p>
+      <p className="text-base mb-2">
+        EVAA pays to deposits in the <span className="font-bold">USDT Supply Rate</span> the shown APY continuously on every block. You can deposit as much as you want and withdraw at any moment. There are no lock-ups and no fees for using.
+      </p>
+    </div>
             </SubTemplateBlockVertical>
           </OverBox>
         </div>
@@ -306,6 +293,201 @@ function DetailStaking() {
           
         </div>
       </div>
+      :
+      <div class="bg-gray-50 h-screen">
+        <div class="p-4">
+        <div>
+        <div class="p-4">
+          <OverBox>
+          <SubTemplateBlockVertical>
+          <ManageTitle>
+            <Title> Earn
+              <h3 class="text-base font-semibold leading-7 text-gray-900"></h3>
+            </Title>
+            <Backbutton class="inline-flex items-center px-4 py-2 text-sm font-medium border border-blue-200 text-center text-blue-500 bg-white rounded-lg hover:bg-blue-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"/>
+          </ManageTitle> 
+                
+            <div>
+            <div style={{marginTop:"20px"}}></div>
+              <div class="sm:px-0">        
+              <div className="border border-gray-100 rounded-lg p-6 bg-white">
+                <button className="flex flex-col">
+                <div className="flex justify-evenly">
+                      <div className="flex">
+                      <div className="relative">
+                          <div className="relative mr-1.5 rounded-full bg-white">
+                            <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                            <img src={"https://img.cryptorank.io/coins/ston_fi1715854233885.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="relative mr-1.5 rounded-full bg-white">
+                          <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                          <img src={"https://icons.llamao.fi/icons/protocols/storm-trade?w=48&h=48"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex flex-row items-center">
+                          <p className="mx-4 text-xm font-bold text-neutral-800">Delta Neutral</p>
+                        </div>
+                        <div className="flex text-xm mx-4">
+                          StonFi + Storm
+                        </div>
+                      </div>  
+                      <p className="text-base text-neutral-800">42.35%</p>
+                    </div>                  
+
+                    <div className="mt-2">
+                      <div className="flex flex-col gap-2 w-full pt-3">
+                        <div className="grid grid-cols-[1fr_3fr] gap-3">
+                          <p className="font-semibold text-center">Balance</p>
+                          <p className="text-neutral-600 text-left">98.1 USDT</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </button>
+                </div>      
+              <div style={{marginTop:"20px"}}></div>
+              <div className="border border-gray-100 rounded-lg p-5" style={{"backgroundColor":"white"}}>
+              <div style={{marginTop:"10px"}}></div>
+
+              <div>Long Position </div>              
+
+          <div style={{marginTop:"20px"}}></div>
+              <div className="pt-1">
+              <div style={{marginTop:"10px"}}></div>
+              <div class="items-center">   
+                                
+                  <div class="relative w-full">
+                      {selection === "deposit" ? 
+                      <>
+                        <div class="relative">
+                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            </div>
+                            <input type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.availableToken}`} required  />
+                            <button onClick={maxDepositHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                        </div>
+                      </>
+                      :
+                      <>
+                        <div class="relative">
+                          <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                          </div>
+                          <input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.investedToken}`} required />
+                            <button onClick={maxWithdrawerHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                          </div>
+                      </>
+                    }
+                  </div>              
+              </div>
+
+          <div style={{marginTop:"20px"}}></div>
+            <div style={{textAlign:"right"}}>
+              <div style={{marginTop:"30px"}}></div>
+                
+                {true === "" ?
+                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
+                        Connect Wallet
+                      </span>
+                    </button>
+                    :
+                    true ?
+                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
+                        Swap USDT to TON (StonFi)
+                      </span>
+                    </button>
+                    :
+                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-gray-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
+                        Submit
+                      </span>
+                    </button>
+                  }
+              </div>
+            </div>
+          </div>
+
+          <div className="border border-gray-100 rounded-lg p-5 mt-3" style={{"backgroundColor":"white"}}>
+              <div style={{marginTop:"10px"}}></div>
+
+              <div>Short Position</div>              
+
+          <div style={{marginTop:"20px"}}></div>
+              <div className="pt-1">
+              <div style={{marginTop:"10px"}}></div>
+              <div class="items-center">   
+                                
+                  <div class="relative w-full">
+                      {selection === "deposit" ? 
+                      <>
+                        <div class="relative">
+                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            </div>
+                            <input type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.availableToken}`} required  />
+                            <button onClick={maxDepositHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                        </div>
+                      </>
+                      :
+                      <>
+                        <div class="relative">
+                          <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                          </div>
+                          <input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.investedToken}`} required />
+                            <button onClick={maxWithdrawerHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                          </div>
+                      </>
+                    }
+                  </div>              
+              </div>
+
+          <div style={{marginTop:"20px"}}></div>
+            <div style={{textAlign:"right"}}>
+              <div style={{marginTop:"30px"}}></div>
+                
+                {true === "" ?
+                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
+                        Connect Wallet
+                      </span>
+                    </button>
+                    :
+                    true ?
+                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
+                      Short TON with USDT (Storm Trade)
+                      </span>
+                    </button>
+                    :
+                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-gray-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
+                        Submit
+                      </span>
+                    </button>
+                  }
+              </div>
+            </div>
+          </div>
+          </div>
+
+          <div style={{marginTop:"30px"}}></div>
+          <div class="pt-6"></div>
+          </div>
+          <DeltaNeutralStrategy />
+            </SubTemplateBlockVertical>
+          </OverBox>
+        </div>
+      </div>
+          
+        </div>
+      </div>
+      }
+
+
       {depositmodal ? (
             <>
             <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -368,6 +550,31 @@ function DetailStaking() {
     </>
   );
 }
+
+const DeltaNeutralStrategy = () => {
+  return (
+    <div className="bg-white p-6 rounded-lg border border-gray-100 mx-auto">
+      <h2 className="text-xl font-bold text-center mb-4">Delta Neutral Position Strategy</h2>
+      <p className="text-base mb-2">
+        Taking advantage of funding fee opportunities in <span className="font-bold">TON Coin</span>.
+      </p>
+      <div className="bg-gray-100 p-4 rounded-lg shadow-inner mb-4">
+        <ol className="list-decimal list-inside">
+          <li className="mb-2">
+            Converting your <span className="font-bold">USDT</span> to <span className="font-bold">TON</span> on <span className="font-bold">Ston.fi DEX</span> (going long on TON).
+          </li>
+          <li className="mb-2">
+            Simultaneously, shorting an equivalent amount of <span className="font-bold">TON</span> on <span className="font-bold">Storm Trade PerpDEX</span> using <span className="font-bold">USDT</span>.
+          </li>
+        </ol>
+      </div>
+      <p className="text-base mb-2">
+        When the funding fee for TON Coin is positive on Storm Trade PerpDEX, this strategy allows you to profit from the funding fees while maintaining a delta-neutral position. 
+        You can invest as much as you want and withdraw at any moment. There are no lock-ups and no fees for using this strategy.
+      </p>
+    </div>
+  );
+};
 
 const OverBox = styled.div`
 

@@ -157,7 +157,7 @@ function Products({ select, setSelect }) {
                 </div>
 
                 <div className="border border-gray-200 rounded-lg p-5 bg-white mt-5">
-                  <Link to="/detail/0xae78736Cd615f374D3085123A210448E74Fc6393">
+                  <Link to="/detail/deltaNeutral">
                   <div className="flex justify-evenly">
                       <div className="flex">
                       <div className="relative">
