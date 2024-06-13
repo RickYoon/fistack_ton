@@ -148,6 +148,16 @@ function Heading (props) {
           <li>
             <ul role="list" className="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0">
               <LogoNetwork target="_blank" class="logo-network" href="https://ethereum.org" title="https://ethereum.org" rel="noreferrer">
+                <img src={"https://icons.llamao.fi/icons/protocols/dedust?w=48&h=48"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                  <span class="logo_label font-normal text-gray-500">
+                    DeDust
+                  </span>
+              </LogoNetwork>
+            </ul>
+          </li>
+          <li>
+            <ul role="list" className="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0">
+              <LogoNetwork target="_blank" class="logo-network" href="https://ethereum.org" title="https://ethereum.org" rel="noreferrer">
                 <img src={"https://miro.medium.com/v2/resize:fit:500/0*Ime5HkG-dVSWRvah.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
                   <span class="logo_label font-normal text-gray-500">
                     EEVA
@@ -155,6 +165,16 @@ function Heading (props) {
               </LogoNetwork>
             </ul>
           </li>
+          <li>
+            <ul role="list" className="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0">
+              <LogoNetwork target="_blank" class="logo-network" href="https://ethereum.org" title="https://ethereum.org" rel="noreferrer">
+                <img src={"https://icons.llamao.fi/icons/protocols/storm-trade?w=48&h=48"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                  <span class="logo_label font-normal text-gray-500">
+                    strom
+                  </span>
+              </LogoNetwork>
+            </ul>
+          </li>          
 
         </ul>
       </div>

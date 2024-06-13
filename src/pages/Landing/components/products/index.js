@@ -15,6 +15,7 @@ const people = [
 function Products({ select, setSelect }) {
 
   const [selected, setSelected] = useState(people[0])
+  const [category, setCategory] = useState("simple")
 
   // function selectHandler (e) {
   //   setSelected(e)
@@ -39,21 +40,36 @@ function Products({ select, setSelect }) {
         </div>
         <div className="flex relative inline-block text-center mx-auto">
           <div className="mx-auto text-base font-semibold leading-7 text-indigo-800 pt-10">
-            <a href="#" class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center">
+            {category === "simple" ? 
+            <>
+              <div class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center">
+                Simple
+              </div>
+                <div onClick={()=>setCategory("pro")} class="hover:cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-400 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-400 dark:text-blue-400 border border-gray-300 inline-flex items-center justify-center">
+                Pro
+              </div>
+            </>
+          :
+          <>
+            <div onClick={()=>setCategory("simple")} class="hover:cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-400 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-400 dark:text-blue-400 border border-gray-300 inline-flex items-center justify-center">
               Simple
-            </a>
-              <a href="#" class="bg-gray-100 hover:bg-gray-200 text-gray-400 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-400 dark:text-blue-400 border border-gray-300 inline-flex items-center justify-center">
+            </div>
+              <div class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center">
               Pro
-            </a>
+            </div>
+          </>
+          }
           </div>
         </div>
 
-        <div className="border border-gray-200 rounded-lg p-6 bg-white mt-10">
+
+        {category === "simple" ? 
+        <>
+            <div className="border border-gray-200 rounded-lg p-6 bg-white mt-10">
                   <Link to="/detail/0xae78736Cd615f374D3085123A210448E74Fc6393">
-                  <button className="flex flex-col">
-                    <div className="flex items-center">
+                  <div className="flex justify-evenly">
                       <div className="flex">
-                        <div className="relative">
+                      <div className="relative">
                           <div className="relative mr-1.5 rounded-full bg-white">
                               <img class="w-10 h-10 rounded-full" src={"https://pbs.twimg.com/profile_images/1710312751636082688/zdCXb-2F_400x400.png"} alt=""/>
                             <div className="absolute -right-2.5 -bottom-px">
@@ -67,23 +83,22 @@ function Products({ select, setSelect }) {
                       <div className="flex flex-col">
                         <div className="flex items-center">
                           <p className="mx-4 text-base font-bold text-neutral-800">Lend USDT</p>
-                          <p className="text-base text-neutral-800">24.35%</p>
                         </div>
                         <div className="flex text-sm mx-4">
                           EEVA
                         </div>
                       </div>  
+                      <div className="text-base text-neutral-800">24.35%</div>
+
                     </div>                  
-                  </button>
                   </Link>
                 </div>
 
                 <div className="border border-gray-200 rounded-lg p-6 bg-white mt-5">
                   <Link to="/detail/0xae78736Cd615f374D3085123A210448E74Fc6393">
-                  <button className="flex flex-col">
-                    <div className="flex items-center">
+                  <div className="flex justify-evenly">
                       <div className="flex">
-                        <div className="relative">
+                      <div className="relative">
                           <div className="relative mr-1.5 rounded-full bg-white">
                               <img class="w-10 h-10 rounded-full" src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpA7RYVXXbTW7j7MUM4JNPl8MZg9AHPRGO3Q&s"} alt=""/>
                             <div className="absolute -right-2.5 -bottom-px">
@@ -97,16 +112,83 @@ function Products({ select, setSelect }) {
                       <div className="flex flex-col">
                         <div className="flex flex-row items-center">
                           <p className="mx-4 text-base font-bold text-neutral-800">Deposit USDT</p>
-                          <p className="text-base text-neutral-800">24.35%</p>
                         </div>
                         <div className="flex text-sm mx-4">
                           Storm Trade
                         </div>
-                      </div>  
+                      </div>
+                      <div className="text-base text-neutral-800">24.35%</div>
+  
                     </div>                  
-                  </button>
                   </Link>
                 </div>
+                </>
+                :
+                <>
+                <div className="border border-gray-200 rounded-lg p-5 bg-white mt-10">
+                  <Link to="/detail/0xae78736Cd615f374D3085123A210448E74Fc6393">
+                    <div className="flex justify-evenly">
+                      <div className="flex">
+                      <div className="relative">
+                          <div className="relative mr-1.5 rounded-full bg-white">
+                            <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                            <img src={"https://ton.org/download/ton_symbol.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="relative mr-1.5 rounded-full bg-white">
+                          <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                          <img src={"https://static-00.iconduck.com/assets.00/tether-cryptocurrency-icon-2048x2048-dp13oydi.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex flex-row items-center">
+                          <p className="mx-4 text-base font-bold text-neutral-800">LP farming</p>
+                        </div>
+                        <div className="flex text-sm mx-4">
+                          StonFi
+                        </div>
+                      </div>  
+                      <div className="text-base text-neutral-800">92.35%</div>
+                    </div>                  
+                  </Link>
+                </div>
+
+                <div className="border border-gray-200 rounded-lg p-5 bg-white mt-5">
+                  <Link to="/detail/0xae78736Cd615f374D3085123A210448E74Fc6393">
+                  <div className="flex justify-evenly">
+                      <div className="flex">
+                      <div className="relative">
+                          <div className="relative mr-1.5 rounded-full bg-white">
+                            <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                            <img src={"https://img.cryptorank.io/coins/ston_fi1715854233885.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="relative mr-1.5 rounded-full bg-white">
+                          <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                          <img src={"https://icons.llamao.fi/icons/protocols/storm-trade?w=48&h=48"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex flex-row items-center">
+                          <p className="mx-4 text-xm font-bold text-neutral-800">Delta Neutral</p>
+                        </div>
+                        <div className="flex text-xm mx-4">
+                          StonFi + Storm
+                        </div>
+                      </div>  
+                      <p className="text-base text-neutral-800">42.35%</p>
+                    </div>                  
+                  </Link>
+                </div>
+
+                </>
+            }
 
 
 
