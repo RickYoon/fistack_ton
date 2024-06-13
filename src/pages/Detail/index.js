@@ -49,7 +49,7 @@ function DetailStaking() {
     };
     return (
       <button onClick={onClickBtn} class="inline-flex items-center px-4 py-2 text-sm font-medium border border-blue-200 text-center text-blue-500 bg-white rounded-lg hover:bg-blue-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-      돌아가기
+        Back to List
       </button>
     )
   }
@@ -147,27 +147,43 @@ function DetailStaking() {
               <div class="sm:px-0">        
               <div className="border border-gray-100 rounded-lg p-6 bg-white">
           <button className="flex flex-col">
-            <div className="flex items-center">
-              <div className="flex">
-                <div className="relative">
-                  <div className="relative mr-1.5 rounded-full bg-white">
-                      <img class="w-10 h-10 rounded-full" src={"https://img.cryptorank.io/coins/ston_fi1715854233885.png"} alt=""/>
-                    <div className="absolute -right-2.5 -bottom-px">
-                      <div className="w-6 h-6 p-[3px] border rounded-full z-10 bg-white" style={{ borderColor: 'rgb(221, 221, 221)' }}>
-                      <img class="w-6 h-4 rounded-full" src={"https://img.cryptorank.io/coins/ston_fi1715854233885.png"} alt=""/>
+          <button className="flex flex-col">
+                    <div className="flex items-center">
+                      <div className="flex">
+                        <div className="relative">
+                          <div className="relative mr-1.5 rounded-full bg-white">
+                              <img class="w-10 h-10 rounded-full" src={"https://pbs.twimg.com/profile_images/1710312751636082688/zdCXb-2F_400x400.png"} alt=""/>
+                            <div className="absolute -right-2.5 -bottom-px">
+                              <div className="w-6 h-6 p-[3px] border rounded-full z-10 bg-white" style={{ borderColor: 'rgb(221, 221, 221)' }}>
+                              <img class="w-6 h-4 rounded-full" src={"https://static-00.iconduck.com/assets.00/tether-cryptocurrency-icon-2048x2048-dp13oydi.png"} alt=""/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <p className="mx-4 text-xl font-bold text-neutral-800">
-                Lido Staking
-              </p>
-            </div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center">
+                          <p className="mx-4 text-base font-bold text-neutral-800">Lend USDT</p>
+                          <p className="text-base text-neutral-800">24.35%</p>
+                        </div>
+                        <div className="flex text-sm mx-4">
+                          EEVA
+                        </div>
+                      </div>  
+                    </div>                  
+                  </button>
 
-            <div className="mt-5">
-              <p className="font-semibold text-left">Balance : 11 stETH</p>
-              <p className="text-neutral-600 text-left">stETH</p>
+            <div className="mt-2">
+            <div className="flex flex-col gap-2 w-full pt-3">
+              <div className="grid grid-cols-[1fr_3fr] gap-3">
+                <p className="font-semibold text-center">Balance</p>
+                <p className="text-neutral-600 text-left">98.1 USDT</p>
+              </div>
+              <div className="grid grid-cols-[1fr_3fr] gap-3">
+                <p className="font-semibold text-left">Invested</p>
+                <p className="text-neutral-600 text-left">0 USDT</p>
+              </div>
+              </div>
             </div>
 
           </button>
@@ -263,22 +279,26 @@ function DetailStaking() {
           </div>
 
           <div style={{marginTop:"30px"}}></div>
-          <div class="mt-6"></div>
+          <div class="pt-6"></div>
           </div>
-          {/* {!chainMatch ? 
-          <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-100 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
-          <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-          </svg>
-          <span class="sr-only">Info</span>
-          <div>
-            <span class="font-medium">Unsupported chain. Please switch to Goerli in your wallet and restart the page.</span> 
-                </div>
-                </div>
 
-                :
-                <></>
-              } */}
+          <div className="border border-gray-100 rounded-lg p-6 bg-white">
+            <div>
+              How Does it work?
+            </div>
+            <div class="pt-3">
+              When you login to fistack and deposit into the USDT Lending Earn Strategy, 
+              you will be investing your USDT into a EVAA Lending Contract.              
+              EVAA pays to deposits in the USDT Supply Rate the shown APY continuously on every block. 
+              You can deposit as much as you want and withdraw at any moment. 
+              There are no lock-ups and no fees for using.
+            </div>
+
+            
+
+                  
+          </div>
+
             </SubTemplateBlockVertical>
           </OverBox>
         </div>
@@ -343,6 +363,7 @@ function DetailStaking() {
             <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
             </>
         ) : null}
+
 
     </>
   );
