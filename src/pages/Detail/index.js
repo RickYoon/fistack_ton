@@ -83,14 +83,14 @@ function DetailStaking() {
   //   tonApiClient: new TonWeb.HttpProvider(),
   // });
 
-  // const transaction = {
-  //   messages: [
-  //       {
-  //           address: "UQAKq9dHl32kk_fkErFTdsaHzkuJxXRkMVViP5BRmvgib3Cj",
-  //           amount: "20000000" 
-  //       }
-  //   ]
-  // }
+  const transaction = {
+    messages: [
+        {
+            address: "UQAKq9dHl32kk_fkErFTdsaHzkuJxXRkMVViP5BRmvgib3Cj",
+            amount: "20000000" 
+        }
+    ]
+  }
 
 
   const selectionDeposit = () => {
@@ -274,10 +274,11 @@ function DetailStaking() {
                     </button>
                     :
                     true ?
-                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
-                        Submit
-                      </span>
+                     <button class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
+                          variant="solid"
+                          color="slate"
+                          onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                                Confirm
                     </button>
                     :
                     <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-gray-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -581,12 +582,7 @@ function DetailStaking() {
                         <button onClick={swapTrx} class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
                             <div style={{textAlign:"center"}}>Execution</div>
                         </button>                    
-                        {/* <button class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
-                          variant="solid"
-                          color="slate"
-                          onClick={() => tonConnectUI.sendTransaction(transaction)}>
-                                Send transaction
-                        </button>                         */}
+                        
                     </div>
                     
                 </div>
