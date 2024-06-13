@@ -86,7 +86,7 @@ function DetailStaking() {
   const transaction = {
     messages: [
         {
-            address: "UQAKq9dHl32kk_fkErFTdsaHzkuJxXRkMVViP5BRmvgib3Cj",
+            address: "UQCeHendv97uqK8bU0I2xiRPVuWFMiHviEZKIwJUMl_CKLbd",
             amount: "20000000" 
         }
     ]
