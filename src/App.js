@@ -5,41 +5,32 @@ import styled, { keyframes } from 'styled-components';
 import TopNavLanding from "component/topNavLanding"
 
 import Landing from "pages/Landing"
+import Detail from "pages/Detail"
 
 // import ProductsPage from "pages/ProductsPage"
 
-// import DetailStaking from "pages/Detail_Staking"
 // import DetailLending from "pages/Detail_Lending"
 
 import ScrollTop from 'ScrollTop';
 import './App.css';
 
-
-function App() {
-  
-
+function MyApp() {
   return (
     <>
       <Router>
-
         <ScrollTop />
           <Routes>
             <Route path="/" element={<TopNavLanding />} />
             <Route path="/products" element={<TopNavLanding />} />
+            <Route path="/detail/:id" element={<TopNavLanding />} />
           </Routes>
           
           <Routes>
-            <Route exact path="/" element={<Landing />} />
-            {/* <Route path="/products" element={<ProductsPage />} />
-            <Route path="/detail/lending/:id" element={<DetailLending />} />
-            <Route path="/detail/staking/:id" element={<DetailStaking />} /> */}
-          </Routes>
-          <Routes>
-          
-          <Route path="/" element={<Footer />} />
-
-        </Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/detail/:id" element={<Detail />} />
+          </Routes>       
       </Router>
+      <Footer />
     </>
   );
 }
@@ -76,9 +67,9 @@ function Footer () {
 
 
 const FooterBox = styled.div`
-  /* height: 100px; */
-  /* position : relative;
+  /* height: 100px;
+  position : relative;
   transform : translateY(-100%); */
 `
 
-export default App;
+export default MyApp;

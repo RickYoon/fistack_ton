@@ -6,69 +6,54 @@ import {Buffer} from 'buffer';
 import Features from './components/features/index'
 import Products from './components/products/index'
 import InvestTable from "./components/investTable"
-// import StableLendTable from "./components/stableLendTable"
 
-// import { TonClient, TonClient4 } from "@ton/ton";
-// import { getHttpEndpoint, getHttpV4Endpoint } from "@orbs-network/ton-access";
+import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
+import { DEX, pTON } from '@ston-fi/sdk';
 
-// import { StormSDK } from "@storm-trade/sdk";
-
-// import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
-// import { DEX, pTON } from '@ston-fi/sdk';
-// import TonWeb from 'tonweb';
-
-const selector = [
-  { type: 'Earn',
-    token: "USDT"
-  }
-]
 
 
 function Landing() {
-
-  // const dex = new DEX.v1.Router({
-  //   tonApiClient: new TonWeb.HttpProvider(),
-  // });
+  
 
   const [investList, setInvestList] = useState([{
-      "poolName": "This",
-      "klayAmount": 19634899.511379745,
-      "apr": 5.265849838582299,
-      "type": "Lending",
-      "klayTVL": 3966249.7012987086
-  }])
-
-
-
-  const homeRef = useRef(null);
+        "poolName": "TON | USDT LP",
+        "apr": 90.5,
+        "type": "LP Farming",
+        "poolNumber": "0001"
+      },
+      {
+        "poolName": "EVAA",
+        "apr": 18.9,
+        "type": "Simple Earn",
+        "poolNumber": "0002"
+      },{
+        "poolName": "EVAA + Storm Trade",
+        "apr": 31.5,
+        "type": "Delta-neutral (future-long)",
+        "poolNumber": "0003"
+      },{
+        "poolName": "ston-fi + Storm Trade",
+        "apr": -24,
+        "type": "Delta-neutral (future-Short)",
+        "poolNumber": "0004"
+      }
+    ])
 
   useEffect(() => {
 
   }, [])
 
-  async function storm(){
-      // Init mainnet jUSDT SDK with ton client:
-      // const sdk = StormSDK.asMainnetJUSDT();
-
-      // // Get full assets list
-      // const assetsList = await sdk.getAssets();
-      // console.log("assetsList", assetsList);
-
-      // // Get markets for a given vault
-      // const marketList = await sdk.getMarkets();
-      // console.log("marketList", marketList);
-  }
 
   return (
     <>
-      <Heading props={homeRef}/>
+      <Heading/>
       <Features />
-      <div class="bg-gray-50 py-20 sm:py-20" ref={homeRef}>
+      <div class="bg-gray-50 py-20 sm:py-20">
         <div class="mx-auto max-w-7xl px-6 lg:px-8">
           <div class="mx-auto max-w-4xl lg:text-center">
             <Products />
-            <InvestTable data={investList}/>
-            <div style={{height:"12px"}} />
+            {/* <InvestTable data={investList}/> */}
+            <div style={{height:"50px"}} />
           </div>
         </div>
       </div>
@@ -78,27 +63,41 @@ function Landing() {
 
 
 
+
+
+
+
 function Heading (props) {
+
+  // const dex = new DEX.v1.Router({
+  //   tonApiClient: new TonWeb.HttpProvider(),
+  // });
 
   // console.log("props", props.props)
   const navigate = useNavigate();
 
-  // const onHomeClick = () => {
-  //   navigate("/products")
-  // };
+  const onHomeClick = () => {
+    navigate("/products")
+  };
 
-  // const [tonConnectUI, setOptions] = useTonConnectUI();
-  // const wallet = useTonAddress();
+  const [tonConnectUI, setOptions] = useTonConnectUI();
+  const wallet = useTonAddress();
 
-//   const transaction = {
-//     messages: [
-//         {
-//             address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F",
-//             amount: "20000000" 
-//         }
-//     ]
+  const transaction = {
+    messages: [
+        {
+            address: "0:412410771DA82CBA306A55FA9E0D43C9D245E38133CB58F1457DFB8D5CD8892F",
+            amount: "20000000" 
+        }
+    ]
+  }
 
-// }
+  const handleScrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth',
+    });
+  };
 
 
   return (
@@ -119,58 +118,41 @@ function Heading (props) {
         for <br /> Crypto Investors
       </h1>
       <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
-      Enhance profits with us
+      Maximize profits with our guide
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
-      {/* <button className="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900"
-          variant="solid"
-          color="slate"
-          onClick={() => tonConnectUI.sendTransaction(transaction)}>
-                Send transaction
-         </button>
-
-         <button
-      onClick={async () => {
-        const swapTxParams = await dex.buildSwapTonToJettonTxParams({
-          offerAmount: TonWeb.utils.toNano('1'), // swap 1 TON
-          askJettonAddress: 'EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO', // for a STON
-          minAskAmount: TonWeb.utils.toNano('0.1'), // but not less than 0.1 STON
-          proxyTonAddress: pTON.v1.address.toString(),
-          userWalletAddress: wallet,
-        });
-
-        await tonConnectUI.sendTransaction({
-          validUntil: Date.now() + 1000000,
-          messages: [
-            {
-              address: swapTxParams.to.toString(),
-              amount: swapTxParams.gasAmount.toString(),
-              payload: TonWeb.utils.bytesToBase64(
-                await swapTxParams.payload.toBoc(),
-              ),
-            },
-          ],
-        });
-      }}
-    >
-      Swap 1 TON to STON
-    </button> */}
-        <a
-          className="group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900"
-          variant="solid"
-          color="slate"
-          href="/products"
-        >
-          Find Investment
-        </a>
+      
+<a
+        className="hover:cursor-pointer group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900"
+        variant="solid"
+        color="slate"
+        onClick={handleScrollToBottom}
+      >
+        Find Investment
+      </a>
 
       </div>
       <div className="mt-20 lg:mt-30">
-        <p className="font-display text-base text-slate-900">Supported Chain</p>
+        <p className="font-display text-base text-slate-900">Connected Protocols</p>
         <ul role="list" className="mt-8 flex items-center justify-center gap-x-8 sm:flex-col sm:gap-x-0 sm:gap-y-10 xl:flex-row xl:gap-x-12 xl:gap-y-0">
           <li>
             <ul role="list" className="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0">
-              <LogoNetwork target="_blank" class="logo-network" href="https://ethereum.org" title="https://ethereum.org" rel="noreferrer"><img src={"https://seeklogo.com/images/T/toncoin-ton-logo-DBE22B2DFB-seeklogo.com.png"} alt="Klaytn" style={{width:"60px", borderRadius:"50%"}}/><span class="logo_label font-normal text-gray-500">Ton</span></LogoNetwork>
+              <LogoNetwork target="_blank" class="logo-network" href="https://ethereum.org" title="https://ethereum.org" rel="noreferrer">
+                <img src={"https://img.cryptorank.io/coins/ston_fi1715854233885.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                  <span class="logo_label font-normal text-gray-500">
+                    StonFi
+                  </span>
+              </LogoNetwork>
+            </ul>
+          </li>
+          <li>
+            <ul role="list" className="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0">
+              <LogoNetwork target="_blank" class="logo-network" href="https://ethereum.org" title="https://ethereum.org" rel="noreferrer">
+                <img src={"https://miro.medium.com/v2/resize:fit:500/0*Ime5HkG-dVSWRvah.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                  <span class="logo_label font-normal text-gray-500">
+                    EEVA
+                  </span>
+              </LogoNetwork>
             </ul>
           </li>
 

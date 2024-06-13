@@ -5,126 +5,43 @@ import react, {useState, useEffect} from "react";
 import { useDispatch , useSelector } from 'react-redux';
 import { useParams, useNavigate } from "react-router-dom";
 
-import { 
-  walletConnectModalOpen} from 'redux/reducers/WalletActions'
-
-import {kaikasKlayDepositExecutor} from "./kaikasExecutor"
-import {metamaskDepositExecutor} from './metamaskExecutor.js';
-
 import WalletManageBox from "./components/WalletManageBox"
 
 import poolInfos from "./poolInfos.json"
-
+import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
+import TonWeb from "tonweb";
+import { DEX, pTON } from "@ston-fi/sdk";
 
 function DetailStaking() {
 
   const { id } = useParams();
-  const dispatch = useDispatch();
+  const [tonConnectUI, setOptions] = useTonConnectUI();
+  const wallet = useTonAddress();
 
   const [depositmodal, setDepositmodal]= useState(false)
   const [amount, setAmount]= useState()
   const [maxAmount, setMaxAmount]= useState(0)
+  const [selection, setSelection] = useState("deposit")
+  const [depositAmount, setDepositAmount] = useState(NaN)
+  const [withdrawalAmount, setWithdrawalAmount] = useState(NaN)
 
-  const [showModal, setShowModal] = useState(false);
-  const [isloading, setIsloading] = useState(false)
-  const [detailData, setDetailData] = useState({
-    "poolName": "Swapscanner",
-    "category": "노드 스테이킹",
-    "contractAddress": "0xf50782a24afcb26acb85d086cf892bfffb5731b5",
+  const [detailAsset, setDetailAsset] = useState({
+    "poolName": "",
+    "category": "",
+    "contractAddress": "",
+    // "TokenName": 0,
     "investedToken": 0,
-    "investedUSD": 0,
     "availableToken": 0,
     "tvlToken": 0,
-    "tvlUSD": 0,
     "tvlKRW": 0,
     "apr": 0
-})
-
-
-// 월렛연결 모달 열기
-const openModal = () => {
-    dispatch(walletConnectModalOpen())
-}
-
-  const userAccount = useSelector(state => state.account) // 지갑주소
-  const walletProvider = useSelector(state => state.walletProvider) // 프로바이더
-  const walletConnectModal = useSelector(state => state.walletConnect) // 지갑 연결 모달 상태
-  
-  useEffect(() => {
-
-    updateAsset()
-
-
-  }, [userAccount])
-
-  useEffect(() => {
-
-    updateAsset()
-
-
-  }, [])
-
-  async function updateAsset () {
-
-
-    if(userAccount === ""){
-
-      const assetList = await axios.get(`https://nyzomcdsf8.execute-api.ap-northeast-2.amazonaws.com/production/linkryptopoolinfos`)
-      console.log("assetList",assetList.data.body.klayStakingPool)
-
-      setDetailData({
-        "poolName": poolInfos[id].poolName,
-        "category": poolInfos[id].poolType,
-        "investedToken": 0,
-        "investedUSD":0,
-        "availableToken": 0,
-        "tvlToken": assetList.data.body.klayStakingPool[poolInfos[id].poolName].klayAmount,
-        "tvlUSD": assetList.data.body.klayStakingPool[poolInfos[id].poolName].klayTVL,
-        "tvlKRW": 0,
-        "apr": 0
-    })
-
-    } else {
-
-      const assetList = await axios.get(`https://wp22qg4khl.execute-api.ap-northeast-2.amazonaws.com/v1/service/managePool?userAddr=${userAccount}&contractAddress=${id}`)
-      console.log("assetList",assetList.data)
-      setDetailData(assetList.data)
-      setMaxAmount(assetList.data.availableToken)
-
-    }
-
-
-  }
-
-  async function depositExecute() {
-
-    if(walletProvider==="kaikas"){
-      await kaikasKlayDepositExecutor(userAccount,id,amount)
-    } else {
-      await metamaskDepositExecutor(userAccount,id,amount)
-    }
-
-    // console.log("trxReturn", trxReturn)
-    const assetList = await axios.get(`https://wp22qg4khl.execute-api.ap-northeast-2.amazonaws.com/v1/service/managePool?userAddr=${userAccount}&contractAddress=${id}`)
-    console.log("assetList",assetList.data)
-    setDetailData(assetList.data)
-    setMaxAmount(assetList.data.availableToken)
-    setDepositmodal(false)
-
-    
-  }
+  })
 
   const goProtocol = () => {
-
-      const stakingUrl = poolInfos[id].linkUrl;
-      window.open(stakingUrl, '_blank');
-
-    }
-
-
-
-
-
+    const stakingUrl = poolInfos[id].linkUrl;
+    window.open(stakingUrl, '_blank');
+  }
+  
   const Backbutton = () => {
     const navigate = useNavigate();
     const onClickBtn = () => {
@@ -145,199 +62,228 @@ const openModal = () => {
     return numberWithCommas;
 
   }
+
+  // const [tonConnectUI, setOptions] = useTonConnectUI();
+  // const wallet = useTonAddress();
+  // const dex = new DEX.v1.Router({
+  //   tonApiClient: new TonWeb.HttpProvider(),
+  // });
+
+  // const transaction = {
+  //   messages: [
+  //       {
+  //           address: "UQAKq9dHl32kk_fkErFTdsaHzkuJxXRkMVViP5BRmvgib3Cj",
+  //           amount: "20000000" 
+  //       }
+  //   ]
+  // }
+
+
+  const selectionDeposit = () => {
+    setSelection("deposit")
+  }
+
+  const selectionWithdrawler = () => {
+    setSelection("withdrawal")
+  }
+
+  const maxDepositHandler = () => {
+    // setDepositAmount(detailAsset.availableToken)
+  }
+
+  const maxWithdrawerHandler = () => {
+    // setWithdrawalAmount(detailAsset.investedToken)
+  }
+
+  async function swapTrx(){
+
+    const dex = new DEX.v1.Router({
+      tonApiClient: new TonWeb.HttpProvider(),
+    });
+    
+    const swapTxParams = await dex.buildSwapTonToJettonTxParams({
+      offerAmount: TonWeb.utils.toNano('1'), // swap 1 TON
+      askJettonAddress: 'EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO', // for a STON
+      minAskAmount: TonWeb.utils.toNano('0.1'), // but not less than 0.1 STON
+      proxyTonAddress: pTON.v1.address.toString(),
+      userWalletAddress: wallet,
+    });
+
+    await tonConnectUI.sendTransaction({
+      validUntil: Date.now() + 1000000,
+      messages: [
+        {
+          address: swapTxParams.to.toString(),
+          amount: swapTxParams.gasAmount.toString(),
+          payload: TonWeb.utils.bytesToBase64(
+            await swapTxParams.payload.toBoc(),
+          ),
+        },
+      ],
+    });
+  }
+
   
 
   return (
     <>
+
       <div class="bg-gray-50 h-screen">
         <div class="p-4">
+
+        <div>
+        <div class="p-4">
           <OverBox>
-              <SubTemplateBlockVertical>
-              <WalletManageBox title={poolInfos[id].poolName}/>
-              <div>
-              <div class="bg-white p-3 border border-gray-100 rounded-lg mb-5">
-
-              <table class="w-full">
-            <thead class="">
-            </thead>
-                <tbody class="bg-white">
-                    <tr>
-                    <td className="pl-5">
-                        <Th>
-                        <PoolinfoBox>                                    
-                            <Explainbox>
-                                <p class="block antialiased font-sans text-xs text-blue-gray-900 font-normal leading-none opacity-70 text-left">
-                                <div>Staking Amount</div>
-                                </p>
-                                {formatNumber(detailData.investedToken)}
-                            </Explainbox>
-                        </PoolinfoBox>
-                        </Th>
-                    </td>
-
-                    <td className="p-4">
-                        <Th>
-                        <PoolinfoBox>                                    
-                            <Explainbox>
-                                <p class="block antialiased font-sans text-xs text-blue-gray-900 font-normal leading-none opacity-70 text-left">
-                                <div>Staking Value</div>
-                                </p>
-                                $ {formatNumber(detailData.investedUSD)}
-                                {/* $ {positionData.totalStats.totalDebtUSD.toFixed(2)} */}
-                            </Explainbox>
-                        </PoolinfoBox>
-                        </Th>
-                    </td>
-                    <td className="p-4">
-                        <Th>
-                        <PoolinfoBox>                                    
-                            <Explainbox>
-                                <p class="block antialiased font-sans text-xs text-blue-gray-900 font-normal leading-none opacity-70 text-left">
-                                <div>APR</div>
-                                </p>
-                                {formatNumber(detailData.apr)} %
-                            </Explainbox>
-                        </PoolinfoBox>
-                        </Th>
-                    </td>
-
-                    </tr>
-                </tbody>
-               
-            </table>
+          <SubTemplateBlockVertical>
+          <ManageTitle>
+            <Title> Earn
+              <h3 class="text-base font-semibold leading-7 text-gray-900"></h3>
+            </Title>
+            <Backbutton class="inline-flex items-center px-4 py-2 text-sm font-medium border border-blue-200 text-center text-blue-500 bg-white rounded-lg hover:bg-blue-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"/>
+          </ManageTitle> 
+                
+            <div>
+            <div style={{marginTop:"20px"}}></div>
+              <div class="sm:px-0">        
+              <div className="border border-gray-100 rounded-lg p-6 bg-white">
+          <button className="flex flex-col">
+            <div className="flex items-center">
+              <div className="flex">
+                <div className="relative">
+                  <div className="relative mr-1.5 rounded-full bg-white">
+                      <img class="w-10 h-10 rounded-full" src={"https://img.cryptorank.io/coins/ston_fi1715854233885.png"} alt=""/>
+                    <div className="absolute -right-2.5 -bottom-px">
+                      <div className="w-6 h-6 p-[3px] border rounded-full z-10 bg-white" style={{ borderColor: 'rgb(221, 221, 221)' }}>
+                      <img class="w-6 h-4 rounded-full" src={"https://img.cryptorank.io/coins/ston_fi1715854233885.png"} alt=""/>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p className="mx-4 text-xl font-bold text-neutral-800">
+                Lido Staking
+              </p>
             </div>
 
-
-            <div class="flex flex-row">
-
-            <div class="basis-3/5 border border-gray-100 m-1 pt-5 pb-5 bg-white block rounded-lg dark:hover:bg-gray-700 mr-5">
-
-            <h5 style={{marginLeft:"30px"}} class="mb-2 text-1xl font-medium tracking-tight text-black dark:text-white">Overview</h5>
-            <div class="mt-6 border-t border-gray-100">
-              <dl class="divide-y divide-gray-100">
-                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt style={{marginLeft:"50px"}} class="text-sm font-medium leading-6 text-gray-900">Name</dt>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    {poolInfos[id].poolName}
-                  </dd>
-                </div>
-                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt style={{marginLeft:"50px"}} class="text-sm font-medium leading-6 text-gray-900">Type</dt>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                  {poolInfos[id].poolType}
-                  </dd>
-                </div>
-                <div class="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt style={{marginLeft:"50px"}} class="text-sm font-medium leading-6 text-gray-900">Total</dt>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">$ {formatNumber(detailData.tvlUSD/1000000)} M</dd>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-0"></dd>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"> {formatNumber(detailData.tvlToken)} KLAY</dd>
-                </div>
-                <div class="pt-5 px-4 py-1 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                  <dt style={{marginLeft:"50px"}} class="text-sm font-medium leading-6 text-gray-900">Infos</dt>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    Company : {poolInfos[id].info.operation}
-                  </dd>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-0"></dd>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    Started : {poolInfos[id].info.startDate}
-                  </dd>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-0"></dd>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    Accident : {poolInfos[id].info.hackingHistory}
-                  </dd>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-1 sm:mt-0"></dd>
-                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    Audit : {poolInfos[id].info.auditPerformed}
-                  </dd>
-                </div>
-              </dl>
-            </div>
+            <div className="mt-5">
+              <p className="font-semibold text-left">Balance : 11 stETH</p>
+              <p className="text-neutral-600 text-left">stETH</p>
             </div>
 
+          </button>
+        </div>      
+              <div style={{marginTop:"20px"}}></div>
+              <div className="border border-gray-100 rounded-lg p-5" style={{"backgroundColor":"white"}}>
+              <div style={{marginTop:"10px"}}></div>
 
-            <div className="basis-2/5 bg-white border border-gray-100 m-1 p-5 rounded-lg" style={{height:"280px"}}>
-              Manage
-              {userAccount === "" ?
-              <>
-                <button onClick={openModal} class="mt-5 inline-block w-full p-3 text-blue-600 bg-blue-100 rounded-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                  Connect Wallet
-                </button> 
-              </>
-              :
-              poolInfos[id].manage.connected ? 
-              <>
-              <button onClick={()=>setDepositmodal(true)} class="mt-5 inline-block w-full p-3 hover:text-blue-600 hover:bg-blue-100 text-gray-600 bg-gray-100 rounded-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                Deposit
-              </button>
-              <button onClick={goProtocol} class="mt-5 inline-block w-full p-3 hover:text-blue-600 hover:bg-blue-100 text-gray-600 bg-gray-100 rounded-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                Withdrawal
-              </button>
-              <button onClick={goProtocol} class="mt-5 inline-block w-full p-3 hover:text-blue-600 hover:bg-blue-100 text-gray-600 bg-gray-100 rounded-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                  Go to protocol
-                </button>    
-              {/* <button class="mt-5 inline-block w-full p-3 hover:text-blue-600 hover:bg-blue-100 text-gray-600 bg-gray-100 rounded-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                Swap
-              </button> */}
-              </>
-              :
-              <>
-                <button onClick={goProtocol} class="mt-5 inline-block w-full p-3 text-blue-600 bg-blue-100 rounded-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                  Go to protocol
-                </button>    
-              </>
-              }
-              
+              {true ? 
 
-                  {/* <ul class="text-sm font-medium text-center text-gray-400 divide-x divide-blue-200 border border-blue-300 rounded-lg flex dark:divide-blue-700 dark:text-blue-400">
+              <ul class="text-sm font-medium text-center text-gray-400 divide-x divide-blue-200 border border-gray-200 rounded-lg flex dark:divide-blue-700 dark:text-blue-400">
                   <li class="w-full">
                       <a href="#" class="inline-block w-full p-2 text-blue-600 bg-blue-100 rounded-l-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                        예치
+                        deposit
                       </a>
                   </li>
                   <li class="w-full">
                       <a href="#" class="inline-block w-full p-2 bg-white rounded-r-lg hover:text-blue-700 hover:bg-blue-50 focus:ring-1 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-blue-800 dark:hover:bg-blue-700">
-                        인출
+                        withdrawal
                       </a>
                   </li>
-                  
-              </ul> */}
+              </ul>
+              :
+              <ul class="text-sm font-medium text-center text-gray-400 divide-x divide-blue-200 border border-gray-300 rounded-lg flex dark:divide-blue-700 dark:text-blue-400">
+              <li class="w-full">
+                  <a  href="#" class="inline-block w-full p-2 text-gray bg-white rounded-l-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
+                   deposit
+                  </a>
+              </li>
+              <li class="w-full">
+                  <a href="#" class="inline-block w-full p-2 text-blue-600 bg-blue-100 rounded-r-lg hover:text-blue-700 hover:bg-blue-50 focus:ring-1 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-blue-800 dark:hover:bg-blue-700">
+                  withdrawal
+                  </a>
+              </li>
+              </ul>
+              }
 
+          <div style={{marginTop:"20px"}}></div>
+              <div className="pt-1">
+              <div style={{marginTop:"10px"}}></div>
+              <div class="items-center">   
+                                
+                  <div class="relative w-full">
+                      {selection === "deposit" ? 
+                      <>
+                        <div class="relative">
+                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                            </div>
+                            <input type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.availableToken}`} required  />
+                            <button onClick={maxDepositHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                        </div>
+                      </>
+                      :
+                      <>
+                        <div class="relative">
+                          <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                          </div>
+                          <input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder={`${detailAsset.investedToken}`} required />
+                            <button onClick={maxWithdrawerHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
+                          </div>
+                      </>
+                    }
+                  </div>              
+              </div>
 
+          <div style={{marginTop:"20px"}}></div>
+            <div style={{textAlign:"right"}}>
+              <div style={{marginTop:"30px"}}></div>
                 
-                  {/* <h5 class="mb-2 text-1xl font-medium tracking-tight text-black dark:text-white"></h5>
-                  <div style={{marginTop:"30px"}}></div>
-          <div class="items-center">   
-              <label for="voice-search" class="sr-only">Search</label>
-              <div class="relative w-full">
-                  <input type="text" id="voice-search" class="bg-white border border-blue-300 text-blue-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-300 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                    placeholder="예치가능 : 20.00 KLAY" required 
-                  />
-              </div>              
+                {true === "" ?
+                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
+                        Connect Wallet
+                      </span>
+                    </button>
+                    :
+                    true ?
+                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
+                        Submit
+                      </span>
+                    </button>
+                    :
+                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-gray-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
+                        Submit
+                      </span>
+                    </button>
+                  }
+              </div>
+            </div>
+          </div>
           </div>
 
           <div style={{marginTop:"30px"}}></div>
-
-          <div style={{textAlign:"right"}}>
-            <button onClick={requestDeposit} style={{width:"100%"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <span style={{width:"30px"}}>예치하기</span>
-            </button>
-          </div> */}
-                        </div>
-              
-
-              </div>
-
-
-
-              
-
-
-          
+          <div class="mt-6"></div>
           </div>
-          {/* <div style={{marginTop:"30px"}}></div> */}
+          {/* {!chainMatch ? 
+          <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-100 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+          <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+          </svg>
+          <span class="sr-only">Info</span>
+          <div>
+            <span class="font-medium">Unsupported chain. Please switch to Goerli in your wallet and restart the page.</span> 
+                </div>
+                </div>
+
+                :
+                <></>
+              } */}
             </SubTemplateBlockVertical>
           </OverBox>
+        </div>
+      </div>
+          
         </div>
       </div>
       {depositmodal ? (
@@ -363,7 +309,7 @@ const openModal = () => {
                         <ul class="my-4 space-y-3">
                             <li>
                                 <a href="#" class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-                                  Klay Balance : 
+                                  USDT Balance : 
                                   <span class="flex-1 ml-3 whitespace-nowrap" >{maxAmount}</span>
                                 </a>
                             </li>
@@ -380,10 +326,15 @@ const openModal = () => {
                         </div>
 
                         <div class="mt-10"></div>
-                        <button class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-                            <div style={{textAlign:"center"}} onClick={depositExecute}>Execution</div>
+                        <button onClick={swapTrx} class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+                            <div style={{textAlign:"center"}}>Execution</div>
                         </button>                    
-                        
+                        {/* <button class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
+                          variant="solid"
+                          color="slate"
+                          onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                                Send transaction
+                        </button>                         */}
                     </div>
                     
                 </div>
@@ -399,16 +350,15 @@ const openModal = () => {
 
 const OverBox = styled.div`
 
-  /* position: relative;
-  margin: 10px auto; 
+  position: relative;
+  margin: 0px auto; 
   width: calc(100% - (230px));
   width: -moz-calc(100% - (230px));
   width: -webkit-calc(100% - (230px));
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
-  height: 100vh;
   overflow: auto;
-  padding: 30px; */
+  padding: 30px;
 
   @media screen and (max-width: 950px){
     width: calc(100%);
@@ -418,16 +368,14 @@ const OverBox = styled.div`
   }
 `
 
-
-
 const SubTemplateBlockVertical = styled.div`
      /* width: 900px; */
      /* max-width: 500px; */
-     margin: 10px auto;
-    max-width: 800px;
+    margin: 0px auto;
+    width: 460px;
     /* padding-bottom: 10px; */
-    position: relative; /* 추후 박스 하단에 추가 버튼을 위치시키기 위한 설정 */
-    padding:15px;
+    position: relative; 
+    /* 추후 박스 하단에 추가 버튼을 위치시키기 위한 설정 */
     /* padding:15px; */
     /* display:flex; */
     /* flex-direction:column; */
@@ -440,7 +388,7 @@ const SubTemplateBlockVertical = styled.div`
     min-width: 0px;
     overflow-wrap: break-word;
     /* background-color: rgb(255, 255, 255); */
-    /* background-clip: border-box; */
+    background-clip: border-box;
     /* border: 1px solid rgba(0, 0, 0, 0.125); */
     /* border-radius: 0.75rem; */
     /* box-shadow: rgb(0 0 0 / 10%) 0rem 0.25rem 0.375rem -0.0625rem, rgb(0 0 0 / 6%) 0rem 0.125rem 0.25rem -0.0625rem; */
@@ -452,6 +400,7 @@ const SubTemplateBlockVertical = styled.div`
       font-size: 12px;
     }
 `;
+
 
 const skeletonKeyframes = keyframes`
   0% {
@@ -499,6 +448,25 @@ const Th = styled.th`
   }
 
 `;
+
+const ManageTitle = styled.div`
+  width: 460px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  @media screen and (max-width: 500px){
+      width: 100%;
+      /* margin: 10px 10px; */
+      font-size: 12px;
+    }
+`
+const Title = styled.h1`
+  font-weight: 600;
+  font-size: 25px;
+`
+
 
 
 export default DetailStaking;

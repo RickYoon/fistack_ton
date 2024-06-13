@@ -3,9 +3,7 @@ import React, {Fragment, useState, useEffect} from "react";
 import styled, { keyframes } from 'styled-components';
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-
-import { useSelector } from 'react-redux';
-import { useParams } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
 
 const people = [
@@ -18,10 +16,10 @@ function Products({ select, setSelect }) {
 
   const [selected, setSelected] = useState(people[0])
 
-  function selectHandler (e) {
-    setSelected(e)
-    setSelect(e)
-  }
+  // function selectHandler (e) {
+  //   setSelected(e)
+  //   setSelect(e)
+  // }
 
   return (
     <>  
@@ -30,127 +28,87 @@ function Products({ select, setSelect }) {
           <OverBox class="bg-gradient-to-r from-green-100 to-blue-500">
             
             <SubTemplateBlockVertical>
-            <h2 class="text-base font-semibold leading-7 text-indigo-600 pb-3">What do you want?</h2>
-              
+            <div className="flex relative inline-block text-center mx-auto">
+            <h2 class="mx-auto text-base font-semibold leading-7 text-indigo-800 pb-3">What do you want?</h2>
+            </div>
               <div className="flex relative inline-block text-center mx-auto">                
-                <div className="mx-auto text-5xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-                I want to{' '}
-                <span className="top-16 text-right pl-3 pr-3">
-                  <Listbox value={selected} onChange={selectHandler}>
-                    <div className="relative inline-block w-30 text-right">
-                      <Listbox.Button className="relative w-full cursor-default py-2 pl-3 pr-10 text-left border-b border-gray-300 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                        <span className="block text-blue-700 truncate text-3xl">{selected.type}</span>
-                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                          <ChevronUpDownIcon
-                            className="h-5 w-5 text-gray-500"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Listbox.Button>
-                      <Transition
-                        as={Fragment}
-                        leave="transition ease-in duration-100"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                      >
-                        <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                          {people.map((person, personIdx) => (
-                            <Listbox.Option
-                              key={personIdx}
-                              className={({ active }) =>
-                                `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                  active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
-                                }`
-                              }
-                              value={person}
-                            >
-                              {({ selected }) => (
-                                <>
-                                  <span
-                                    className={`block truncate ${
-                                      selected ? 'font-medium' : 'font-normal'
-                                    }`}
-                                  >
-                                    {person.type}
-                                  </span>
-                                  {selected ? (
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                      <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                    </span>
-                                  ) : null}
-                                </>
-                              )}
-                            </Listbox.Option>
-                          ))}
-                        </Listbox.Options>
-                      </Transition>
-                    </div>
-                  </Listbox>
-                </span>
-
-                {' '}{' '} with {' '}{' '}
-
-                <span className="top-16 text-right pl-3 pr-3">
-                  <Listbox value={selected} onChange={selectHandler}>
-                    <div className="relative inline-block w-30 text-right">
-                      <Listbox.Button className="relative w-full cursor-default py-2 pl-3 pr-10 text-left border-b border-gray-300 focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-                        <span className="block text-blue-700 truncate text-3xl">{selected.token}</span>
-                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                          <ChevronUpDownIcon
-                            className="h-5 w-5 text-gray-500"
-                            aria-hidden="true"
-                          />
-                        </span>
-                      </Listbox.Button>
-                      <Transition
-                        as={Fragment}
-                        leave="transition ease-in duration-100"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                      >
-                        <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                          {people.map((person, personIdx) => (
-                            <Listbox.Option
-                              key={personIdx}
-                              className={({ active }) =>
-                                `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                                  active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
-                                }`
-                              }
-                              value={person}
-                            >
-                              {({ selected }) => (
-                                <>
-                                  <span
-                                    className={`block truncate ${
-                                      selected ? 'font-medium' : 'font-normal'
-                                    }`}
-                                  >
-                                    {person.token}
-                                  </span>
-                                  {selected ? (
-                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                      <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                                    </span>
-                                  ) : null}
-                                </>
-                              )}
-                            </Listbox.Option>
-                          ))}
-                        </Listbox.Options>
-                      </Transition>
-                    </div>
-                  </Listbox>
-                </span>
+              <div className="mx-auto text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl font-roboto">
+                Earn {' '}
+                {' '}{' '} with {' '}{' '} {selected.token}
               </div>
-
-          
+        </div>
+        <div className="flex relative inline-block text-center mx-auto">
+          <div className="mx-auto text-base font-semibold leading-7 text-indigo-800 pt-10">
+            <a href="#" class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center">
+              Simple
+            </a>
+              <a href="#" class="bg-gray-100 hover:bg-gray-200 text-gray-400 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-400 dark:text-blue-400 border border-gray-300 inline-flex items-center justify-center">
+              Pro
+            </a>
+          </div>
         </div>
 
-     <div class="p-5 mt-0 w-full rounded-lg dark:bg-gray-800 dark:border-gray-700">
-        <div class="flex items-center justify-between mb-4"></div>
+        <div className="border border-gray-200 rounded-lg p-6 bg-white mt-10">
+                  <Link to="/detail/0xae78736Cd615f374D3085123A210448E74Fc6393">
+                  <button className="flex flex-col">
+                    <div className="flex items-center">
+                      <div className="flex">
+                        <div className="relative">
+                          <div className="relative mr-1.5 rounded-full bg-white">
+                              <img class="w-10 h-10 rounded-full" src={"https://pbs.twimg.com/profile_images/1710312751636082688/zdCXb-2F_400x400.png"} alt=""/>
+                            <div className="absolute -right-2.5 -bottom-px">
+                              <div className="w-6 h-6 p-[3px] border rounded-full z-10 bg-white" style={{ borderColor: 'rgb(221, 221, 221)' }}>
+                              <img class="w-6 h-4 rounded-full" src={"https://static-00.iconduck.com/assets.00/tether-cryptocurrency-icon-2048x2048-dp13oydi.png"} alt=""/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex items-center">
+                          <p className="mx-4 text-base font-bold text-neutral-800">Lend USDT</p>
+                          <p className="text-base text-neutral-800">24.35%</p>
+                        </div>
+                        <div className="flex text-sm mx-4">
+                          EEVA
+                        </div>
+                      </div>  
+                    </div>                  
+                  </button>
+                  </Link>
+                </div>
 
-            </div>
+                <div className="border border-gray-200 rounded-lg p-6 bg-white mt-5">
+                  <Link to="/detail/0xae78736Cd615f374D3085123A210448E74Fc6393">
+                  <button className="flex flex-col">
+                    <div className="flex items-center">
+                      <div className="flex">
+                        <div className="relative">
+                          <div className="relative mr-1.5 rounded-full bg-white">
+                              <img class="w-10 h-10 rounded-full" src={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpA7RYVXXbTW7j7MUM4JNPl8MZg9AHPRGO3Q&s"} alt=""/>
+                            <div className="absolute -right-2.5 -bottom-px">
+                              <div className="w-6 h-6 p-[3px] border rounded-full z-10 bg-white" style={{ borderColor: 'rgb(221, 221, 221)' }}>
+                              <img class="w-6 h-4 rounded-full" src={"https://static-00.iconduck.com/assets.00/tether-cryptocurrency-icon-2048x2048-dp13oydi.png"} alt=""/>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex flex-col">
+                        <div className="flex flex-row items-center">
+                          <p className="mx-4 text-base font-bold text-neutral-800">Deposit USDT</p>
+                          <p className="text-base text-neutral-800">24.35%</p>
+                        </div>
+                        <div className="flex text-sm mx-4">
+                          Storm Trade
+                        </div>
+                      </div>  
+                    </div>                  
+                  </button>
+                  </Link>
+                </div>
+
+
 
     </SubTemplateBlockVertical>     
     </OverBox>

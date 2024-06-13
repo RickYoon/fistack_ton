@@ -1,6 +1,5 @@
 import React, {useContext} from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import icons from "assets/tokenIcons"
 import styled from 'styled-components';
 
 function WalletManageBox({title}) {
@@ -23,23 +22,7 @@ function WalletManageBox({title}) {
         <div className="md:flex md:justify-between md:items-center p-3 mb-3">
 
             <div class="flex flex-row" style={{fontSize:"20px"}}>
-              {title === "Swapscanner" ? 
-                <Img src={icons["swapscanner"]} alt="logo" />                 
-                :title === "FSN (Klaystation)" ? 
-                <Img src={icons["Klaystation"]} alt="logo" />        
-                :title === "Jump-EverStake (Klaystation)" ? 
-                <Img src={icons["Klaystation"]} alt="logo" />        
-                :title === "Ozys (Klaystation)" ? 
-                <Img src={icons["Klaystation"]} alt="logo" />        
-                :title === "Hankyung (Klaystation)" ? 
-                <Img src={icons["Klaystation"]} alt="logo" />        
-                :title === "klaybank" ? 
-                <Img src={icons["Klaybank"]} alt="logo" />        
-                :title === "kokoa finance" ? 
-                <Img src={icons["Kokoa"]} alt="logo" />        
-                :
-                <Img src={icons[title]} alt="logo" /> 
-                }
+
                 <div style={{marginLeft:"12px"}}>{title}</div>
             </div>
 
