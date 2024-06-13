@@ -278,14 +278,14 @@ function DetailStaking() {
           </div>
 
           <div className="bg-white p-6 border border-gray-100 rounded-lg mx-auto">
-      <h2 className="text-xl font-bold text-center mb-4">How Does it Work?</h2>
-      <p className="text-base mb-2">
-       Deposit into the <span className="font-bold">USDT Lending Earn Strategy</span>, you will be investing your <span className="font-bold">USDT</span> into a <span className="font-bold">EVAA Lending Contract</span>.
-      </p>
-      <p className="text-base mb-2">
-        EVAA pays to deposits in the <span className="font-bold">USDT Supply Rate</span> the shown APY continuously on every block. You can deposit as much as you want and withdraw at any moment. There are no lock-ups and no fees for using.
-      </p>
-    </div>
+            <h2 className="text-xl font-bold text-center mb-4">How Does it Work?</h2>
+            <p className="text-base mb-2">
+            Deposit into the <span className="font-bold">USDT Lending Earn Strategy</span>, you will be investing your <span className="font-bold">USDT</span> into a <span className="font-bold">EVAA Lending Contract</span>.
+            </p>
+            <p className="text-base mb-2">
+              EVAA pays to deposits in the <span className="font-bold">USDT Supply Rate</span> the shown APY continuously on every block. You can deposit as much as you want and withdraw at any moment. There are no lock-ups and no fees for using.
+            </p>
+          </div>
             </SubTemplateBlockVertical>
           </OverBox>
         </div>
@@ -310,7 +310,7 @@ function DetailStaking() {
             <div>
             <div style={{marginTop:"20px"}}></div>
               <div class="sm:px-0">        
-              <div className="border border-gray-100 rounded-lg p-6 bg-white">
+              <div className="border border-gray-100 rounded-lg p-4 bg-white">
                 <button className="flex flex-col">
                 <div className="flex justify-evenly">
                       <div className="flex">
@@ -354,7 +354,7 @@ function DetailStaking() {
               <div className="border border-gray-100 rounded-lg p-5" style={{"backgroundColor":"white"}}>
               <div style={{marginTop:"10px"}}></div>
 
-              <div>Long Position </div>              
+              <div>Long Position (Staking APR : 3%) </div>              
 
           <div style={{marginTop:"20px"}}></div>
               <div className="pt-1">
@@ -398,7 +398,7 @@ function DetailStaking() {
                     true ?
                     <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                       <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
-                        Swap USDT to TON (StonFi)
+                        Swap USDT to tsTon
                       </span>
                     </button>
                     :
@@ -415,7 +415,7 @@ function DetailStaking() {
           <div className="border border-gray-100 rounded-lg p-5 mt-3" style={{"backgroundColor":"white"}}>
               <div style={{marginTop:"10px"}}></div>
 
-              <div>Short Position</div>              
+              <div>Short Position (Funding Apr : 38%)</div>              
 
           <div style={{marginTop:"20px"}}></div>
               <div className="pt-1">
@@ -459,7 +459,7 @@ function DetailStaking() {
                     true ?
                     <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                       <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
-                      Short TON with USDT (Storm Trade)
+                      Short TON with USDT
                       </span>
                     </button>
                     :
