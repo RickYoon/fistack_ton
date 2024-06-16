@@ -9,7 +9,8 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { TonConnectUIProvider  } from '@tonconnect/ui-react';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-const manifestUrl = 'https://raw.githubusercontent.com/ton-community/tutorials/main/03-client/test/public/tonconnect-manifest.json';
+const manifestUrl = 'https://main.d56xyn8hin4yq.amplifyapp.com/tonconnect-manifest.json';
+
 
 root.render(
   <React.StrictMode>
