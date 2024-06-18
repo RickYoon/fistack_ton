@@ -1,6 +1,7 @@
 import 'App.css'; 
 import React, {Fragment, useState, useEffect} from "react";
 import styled, { keyframes } from 'styled-components';
+import axios from "axios";
 import { Listbox, Transition } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { Link } from 'react-router-dom';
@@ -12,15 +13,92 @@ const people = [
   }
 ]
 
+let iconUrl = {
+  "TON" : "https://ton.org/download/ton_symbol.png",
+  "USDT" : "https://static-00.iconduck.com/assets.00/tether-cryptocurrency-icon-2048x2048-dp13oydi.png"
+}
+
 function Products({ select, setSelect }) {
 
   const [selected, setSelected] = useState(people[0])
   const [category, setCategory] = useState("simple")
+  const [poolInfos, setPoolInfos] = useState([
+    {
+      "poolAddress": "EQD8TJ8xEWB1SpnRE4d89YO3jl0W0EiBnNS4IBaHaUmdfizE",
+      "poolToken": [
+          "TON",
+          "USDT"
+      ],
+      "type": "LP farming",
+      "projectName": "stonfi",
+      "apr": 92.66690813742672
+  }
+  ])
 
-  // function selectHandler (e) {
-  //   setSelected(e)
-  //   setSelect(e)
+  useEffect(() => {
+
+    callPool()
+
+  }, [])
+
+  async function callPool(){
+
+    let tempArray = [];
+    const assetList = await axios.get(`https://nyzomcdsf8.execute-api.ap-northeast-2.amazonaws.com/production/fistackPool?address=001`)
+    // console.log("assetList",assetList.data)
+    assetList.data.forEach((res)=>{
+
+      
+      tempArray.push({
+        "poolAddress": res.poolAddress,
+        "poolToken": res.poolTokens,
+        "type": res.type,
+        "projectName": res.project,
+        "apr": res.apr
+      })
+    })
+
+    console.log("tempArray",tempArray)
+
+  }
+
+  // [
+  //   {"poolAddress" : "EQD8TJ8xEWB1SpnRE4d89YO3jl0W0EiBnNS4IBaHaUmdfizE",
+  //   "icon" : [{
+  //     "type": 0,
+  //     "tokenIcon": "https://static-00.iconduck.com/assets.00/tether-cryptocurrency-icon-2048x2048-dp13oydi.png",
+  //     "projectIcon": "https://pbs.twimg.com/profile_images/1710312751636082688/zdCXb-2F_400x400.png"
+  //   }],
+  //   "strategy": "Lend USDT",
+  //   "projectName": "EVAA",
+  //   "apr": 10
   // }
+  // ]
+
+//   {
+//     "poolTokens": [
+//         "TON",
+//         "USDT"
+//     ],
+//     "apr": 92.66690813742672,
+//     "aprDetail": [
+//         {
+//             "fee": 6.748938137426719
+//         },
+//         {
+//             "farm": 85.91797
+//         }
+//     ],
+//     "project": "stonfi",
+//     "poolAddress": "EQD8TJ8xEWB1SpnRE4d89YO3jl0W0EiBnNS4IBaHaUmdfizE",
+//     "Volume24H": 14982460.654075965,
+//     "tvl": 167011110.5482453,
+//     "type": "LP farming",
+//     "lpPriceUsd": 191758.882103793,
+//     "status": "ok"
+// }
+
+
 
   return (
     <>  
@@ -61,6 +139,46 @@ function Products({ select, setSelect }) {
           }
           </div>
         </div>
+
+        {poolInfos.map((poolinfo)=>
+        <div className="border border-gray-200 rounded-lg pt-6 pb-6 bg-white mt-10">
+          <Link to={`/detail/${poolinfo.poolAddress}`}>
+            <div className="flex justify-evenly">
+            {poolinfo.type==="LP farming" ?
+            <div className="flex">
+              <div className="relative">
+                  <div className="relative mr-1.5 rounded-full bg-white">
+                    <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                    <img src={iconUrl[poolinfo.poolToken[0]]} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                    </div>
+                  </div>
+                </div>
+                <div className="relative mr-1.5 rounded-full bg-white">
+                  <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                  <img src={iconUrl[poolinfo.poolToken[1]]} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                  </div>
+                </div>
+              </div>
+          :
+          <></>
+          }
+              
+              <div className="flex flex-col">
+                <div className="flex items-center">
+                  <p className="mx-4 text-base font-bold text-neutral-800">
+                  {poolInfos[0].type}
+                  </p>
+                </div>
+                <div className="flex text-sm mx-4">
+                  {poolInfos[0].projectName}
+                </div>
+              </div>  
+              <div className="text-base text-neutral-800">{poolinfo.apr.toFixed(2)}%</div>
+
+            </div>                  
+          </Link>
+        </div>
+        )}
 
 
         {category === "simple" ? 
@@ -284,7 +402,7 @@ const SubTemplateBlockVertical = styled.div`
     /* overflow: visible; */
     
   @media screen and (max-width: 500px){
-      width: 100%;
+      /* width: 100%; */
       /* margin: 10px 10px; */
       font-size: 12px;
     }

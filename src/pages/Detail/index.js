@@ -37,6 +37,20 @@ function DetailStaking() {
 
   }, [deltaAmount])
 
+  useEffect(() => {
+
+    callPool()
+  }, [])
+
+  async function callPool(){
+
+    const assetList = await axios.get(`https://nyzomcdsf8.execute-api.ap-northeast-2.amazonaws.com/production/fistackPool?address=001`)
+    console.log("assetList",assetList)
+
+  }
+
+
+
   
 
   const [detailAsset, setDetailAsset] = useState({
@@ -83,16 +97,6 @@ function DetailStaking() {
   //   tonApiClient: new TonWeb.HttpProvider(),
   // });
 
-  const transaction = {
-    messages: [
-        {
-            address: "UQCeHendv97uqK8bU0I2xiRPVuWFMiHviEZKIwJUMl_CKLbd",
-            amount: "20000000" 
-        }
-    ]
-  }
-
-
   const selectionDeposit = () => {
     setSelection("deposit")
   }
@@ -107,6 +111,20 @@ function DetailStaking() {
 
   const maxWithdrawerHandler = () => {
     // setWithdrawalAmount(detailAsset.investedToken)
+  }
+
+  async function sendTon(){
+
+    await tonConnectUI.sendTransaction({
+      validUntil: Date.now() + 1000000,
+      messages: [
+        {
+            address: "UQCeHendv97uqK8bU0I2xiRPVuWFMiHviEZKIwJUMl_CKLbd",
+            amount: "20000000" 
+        }
+      ],
+    });
+
   }
 
   async function swapTrx(){
@@ -277,9 +295,11 @@ function DetailStaking() {
                      <button class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
                           variant="solid"
                           color="slate"
-                          onClick={() => tonConnectUI.sendTransaction(transaction)}>
+                          onClick={sendTon}>
                                 Confirm
                     </button>
+
+                    
                     :
                     <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-gray-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                       <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>

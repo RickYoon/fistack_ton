@@ -49,7 +49,7 @@ function Landing() {
       <Heading/>
       <Features />
       <div class="bg-gray-50 py-20 sm:py-20">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl px-0 lg:px-8">
           <div class="mx-auto max-w-4xl lg:text-center">
             <Products />
             {/* <InvestTable data={investList}/> */}
@@ -121,8 +121,8 @@ function Heading (props) {
       Maximize profits with our guide
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
-      
-<a
+
+      <a
         className="hover:cursor-pointer group inline-flex items-center justify-center rounded-full py-2 px-4 text-sm font-semibold focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 bg-slate-900 text-white hover:bg-slate-700 hover:text-slate-100 active:bg-slate-800 active:text-slate-300 focus-visible:outline-slate-900"
         variant="solid"
         color="slate"
