@@ -6,6 +6,7 @@ import TopNavLanding from "component/topNavLanding"
 
 import Landing from "pages/Landing"
 import Detail from "pages/Detail"
+import DetailLP from "pages/DetailLP"
 
 // import ProductsPage from "pages/ProductsPage"
 
@@ -23,11 +24,13 @@ function MyApp() {
             <Route path="/" element={<TopNavLanding />} />
             <Route path="/products" element={<TopNavLanding />} />
             <Route path="/detail/:id" element={<TopNavLanding />} />
+            <Route path="/detail/lpfarming/:id" element={<TopNavLanding />} />
           </Routes>
           
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/detail/:id" element={<Detail />} />
+            <Route path="/detail/lpfarming/:id" element={<DetailLP />} />
           </Routes>       
       </Router>
       {/* <Footer /> */}

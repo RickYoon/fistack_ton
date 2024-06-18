@@ -45,13 +45,9 @@ function DetailStaking() {
   async function callPool(){
 
     const assetList = await axios.get(`https://nyzomcdsf8.execute-api.ap-northeast-2.amazonaws.com/production/fistackPool?address=001`)
-    console.log("assetList",assetList)
+    // console.log("assetList",assetList)
 
   }
-
-
-
-  
 
   const [detailAsset, setDetailAsset] = useState({
     "poolName": "",

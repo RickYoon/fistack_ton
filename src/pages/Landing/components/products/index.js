@@ -142,9 +142,10 @@ function Products({ select, setSelect }) {
 
         {poolInfos.map((poolinfo)=>
         <div className="border border-gray-200 rounded-lg pt-6 pb-6 bg-white mt-10">
-          <Link to={`/detail/${poolinfo.poolAddress}`}>
-            <div className="flex justify-evenly">
-            {poolinfo.type==="LP farming" ?
+          {poolinfo.type==="LP farming" ?          
+            <Link to={`/detail/lpfarming/${poolinfo.poolAddress}`}>
+              <div className="flex justify-evenly">
+            
             <div className="flex">
               <div className="relative">
                   <div className="relative mr-1.5 rounded-full bg-white">
@@ -159,10 +160,6 @@ function Products({ select, setSelect }) {
                   </div>
                 </div>
               </div>
-          :
-          <></>
-          }
-              
               <div className="flex flex-col">
                 <div className="flex items-center">
                   <p className="mx-4 text-base font-bold text-neutral-800">
@@ -177,6 +174,11 @@ function Products({ select, setSelect }) {
 
             </div>                  
           </Link>
+          :
+          <></>
+          }
+              
+
         </div>
         )}
 
