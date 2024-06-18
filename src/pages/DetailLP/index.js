@@ -89,7 +89,8 @@ function DetailStaking() {
     } else {
       
       // const tonBalance = 
-      const tonweb = new TonWeb();
+      // const tonweb = new TonWeb();
+      const tonweb = new TonWeb(new TonWeb.HttpProvider('https://toncenter.com/api/v2/jsonRPC', {apiKey: '8c4c5ef79ae30a1657c4f3315dd1339b36868c1f4ec7bb39ddaa6af02a6d7218'}));
       const balance = await tonweb.getBalance(wallet);
 
       // getJettonBalance("UQCeHendv97uqK8bU0I2xiRPVuWFMiHviEZKIwJUMl_CKLbd", "EQDNhy-nxYFgUqzfUzImBEP67JqsyMIcyk2S5_RwNNEYku0k")
