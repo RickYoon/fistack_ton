@@ -106,8 +106,16 @@ function DetailStaking() {
       //   "TON": 0
       // })
 
-    }
+    } else {
 
+      let tempRes = {
+        "USDT": 0,
+        "TON": 0
+      }
+
+      setAfterSwap(tempRes)
+
+    }
 
 
     // const [afterSwap, setAfterSwap] = useState({
@@ -315,13 +323,13 @@ function DetailStaking() {
             <div style={{marginTop:"10px"}}></div>
               <div class="sm:px-0">        
               <div className="border border-gray-100 rounded-lg p-6 bg-white">
-                <div className="grid grid-cols-3 gap-3 text-right text-sm">
+                <div className="grid grid-cols-3 gap-3 text-center text-sm">
                   <p className="font-semibold col-span-1">Wallet</p>
                   <p className="font-neutral col-span-1">{balance.walletUSDT} USDT</p>
                   <p className="text-neutral-600 col-span-1">{balance.walletTON.toFixed(2)} TON</p>
-                  <p className="font-semibold col-span-1">Invested</p>
+                  {/* <p className="font-semibold col-span-1">Invested</p>
                   <p className="font-neutral col-span-1">{balance.investedUSDT} USDT</p>
-                  <p className="text-neutral-600 col-span-1">{balance.investedTON} TON</p>
+                  <p className="text-neutral-600 col-span-1">{balance.investedTON} TON</p> */}
                 </div>              
 
               </div> 
@@ -349,8 +357,8 @@ function DetailStaking() {
                   {/* <button onClick={maxDepositHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button> */}
               </div>
              
-              <div className="border border-gray-200 rounded-lg pr-5 pb-5 mt-5 bg-white">
-                <div className="grid grid-cols-3 gap-3 text-right text-sm pt-5">
+              <div className="border border-gray-200 rounded-lg pr-5 pb-5 mt-5 bg-gray-100">
+                <div className="grid grid-cols-3 gap-3 text-center text-sm pt-5">
                  <p className="font-semibold col-span-1">After Swap</p>
                   <p className="font-neutral col-span-1">{afterSwap.USDT} USDT</p>
                   <p className="text-neutral-600 col-span-1">{afterSwap.TON.toFixed(2)} TON</p>
@@ -374,7 +382,7 @@ function DetailStaking() {
                     <button class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
                     variant="solid"
                     color="slate"
-                    onClick={sendTon}>
+                    onClick={() => setDepositmodal(true)}>
                           Confirm
                   </button>
                   }
@@ -408,7 +416,7 @@ function DetailStaking() {
                     
                     <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
                     <h3 className="text-2xl font-semibold">
-                       Deposit
+                       Provide Liquidity
                     </h3>
                     <button onClick={() => setDepositmodal(false)}>
                         <span className="bg-transparent text-black opacity-1 h-6 w-6 text-2xl block outline-none focus:outline-none">
@@ -422,22 +430,26 @@ function DetailStaking() {
                     {/* <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Insert Deposit Amount</p> */}
                         <ul class="my-4 space-y-3">
                             <li>
-                                <a href="#" class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-                                  USDT Balance : 
-                                  <span class="flex-1 ml-3 whitespace-nowrap" >{maxAmount}</span>
-                                </a>
+                                <div class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg bg-gray-50">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+                                  Swap {afterSwap.USDT} USDT to {afterSwap.TON} TON                                  
+                                </div>
+                            </li>
+                            <li>
+                                <div class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg bg-gray-50">
+                                <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg>
+
+                                  Provide Liquidity                                  
+                                </div>
                             </li>
                         </ul>
                     <div class="mt-3"></div>
 
                         {/* <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">0x123...</label> */}
-                        <div class="relative">
-                            {/* <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            </div> */}
-                            <input onChange={(e)=>setAmount(e.target.value)} value={amount} type="search" id="search" class="block w-full p-4 text-xm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Insert Deposit Number" />
-                            <button onClick={()=>setAmount(maxAmount)} class="text-white absolute right-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
-                        </div>
 
                         <div class="mt-10"></div>
                         <button onClick={swapTrx} class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
