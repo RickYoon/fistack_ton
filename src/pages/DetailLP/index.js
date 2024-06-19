@@ -158,9 +158,9 @@ function DetailStaking() {
 
     } else {
 
-      const tonweb = new TonWeb(new TonWeb.HttpProvider('https://toncenter.com/api/v2/jsonRPC', {apiKey: '8c4c5ef79ae30a1657c4f3315dd1339b36868c1f4ec7bb39ddaa6af02a6d7218'}));
-      const balance = await tonweb.getBalance(wallet);
-
+      // const tonweb = new TonWeb(new TonWeb.HttpProvider('https://toncenter.com/api/v2/jsonRPC', {apiKey: '8c4c5ef79ae30a1657c4f3315dd1339b36868c1f4ec7bb39ddaa6af02a6d7218'}));
+      // const balance = await tonweb.getBalance(wallet);
+      const balance = 0;
       const apiRes = await axios.get(`https://tonapi.io/v2/accounts/${wallet}/jettons/0%3Ab113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe?currencies=usd`)
       const usdtBalance = Number(apiRes.data.balance)/1e+6  
       
