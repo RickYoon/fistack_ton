@@ -9,7 +9,7 @@ import TonWeb from "tonweb";
 import { Address, Cell, TonClient } from "ton";
 
 import { DEX, pTON } from "@ston-fi/sdk";
-import { StonApiClient } from '@ston-fi/api';
+// import { StonApiClient } from '@ston-fi/api';
 
 
 let iconUrl = {
@@ -79,25 +79,25 @@ function DetailStaking() {
 
     if(depositAmount>0){
 
-      const client = new StonApiClient();
+      // const client = new StonApiClient();
 
-      const simulateReture = await client.simulateSwap({
-        "askAddress":"EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c",
-        "offerAddress":"EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
-        "offerUnits": ((depositAmount/2)*1e+6).toString(),
-        "slippageTolerance":"0.01",
-        "referralAddress": "UQCeHendv97uqK8bU0I2xiRPVuWFMiHviEZKIwJUMl_CKLbd"
-      })
+      // const simulateReture = await client.simulateSwap({
+      //   "askAddress":"EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c",
+      //   "offerAddress":"EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+      //   "offerUnits": ((depositAmount/2)*1e+6).toString(),
+      //   "slippageTolerance":"0.01",
+      //   "referralAddress": "UQCeHendv97uqK8bU0I2xiRPVuWFMiHviEZKIwJUMl_CKLbd"
+      // })
 
-      let tempRes = {
-        "USDT": 0,
-        "TON": 0
-      }
+      // let tempRes = {
+      //   "USDT": 0,
+      //   "TON": 0
+      // }
 
-      tempRes["USDT"] = depositAmount / 2;
-      tempRes["TON"] = simulateReture.askUnits/(1e+9);
+      // tempRes["USDT"] = depositAmount / 2;
+      // tempRes["TON"] = simulateReture.askUnits/(1e+9);
 
-      setAfterSwap(tempRes)
+      // setAfterSwap(tempRes)
 
       // console.log("simulateReture",(simulateReture.askUnits/(1e+9)))
 
