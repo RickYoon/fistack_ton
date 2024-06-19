@@ -9,6 +9,8 @@ import TonWeb from "tonweb";
 import { Address, Cell, TonClient } from "ton";
 
 import { DEX, pTON } from "@ston-fi/sdk";
+import { StonApiClient } from '@ston-fi/api';
+
 
 let iconUrl = {
   "TON" : "https://ton.org/download/ton_symbol.png",
@@ -25,6 +27,12 @@ function DetailStaking() {
     "investedUSDT": 0,
     "investedTON":0
   })
+
+  const [afterSwap, setAfterSwap] = useState({
+    "USDT": 0,
+    "TON": 0
+  })
+
 
   const [tonConnectUI, setOptions] = useTonConnectUI();
   const [depositmodal, setDepositmodal]= useState(false)
@@ -61,6 +69,60 @@ function DetailStaking() {
 
   }, [deltaAmount])
 
+  useEffect(()=>{
+
+    updateRatio()
+
+  }, [depositAmount])
+
+  async function updateRatio(){
+
+    if(depositAmount>0){
+
+      const client = new StonApiClient();
+
+      const simulateReture = await client.simulateSwap({
+        "askAddress":"EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c",
+        "offerAddress":"EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+        "offerUnits": ((depositAmount/2)*1e+6).toString(),
+        "slippageTolerance":"0.01",
+        "referralAddress": "UQCeHendv97uqK8bU0I2xiRPVuWFMiHviEZKIwJUMl_CKLbd"
+      })
+
+      let tempRes = {
+        "USDT": 0,
+        "TON": 0
+      }
+
+      tempRes["USDT"] = depositAmount / 2;
+      tempRes["TON"] = simulateReture.askUnits/(1e+9);
+
+      setAfterSwap(tempRes)
+
+      // console.log("simulateReture",(simulateReture.askUnits/(1e+9)))
+
+      // const [afterSwap, setAfterSwap] = useState({
+      //   "USDT": 0,
+      //   "TON": 0
+      // })
+
+    }
+
+
+
+    // const [afterSwap, setAfterSwap] = useState({
+    //   "USDT": 0,
+    //   "TON": 0
+    // })
+
+    // get list of all DEX assets
+    // const swapDirectSimulation = await client.simulateSwap({"offer_address":"EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs","offer_units":"100000000000","ask_address":"EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c","slippage_tolerance":"0.01"});
+
+    // console.log("assets : ", swapDirectSimulation)
+
+  }
+
+
   useEffect(() => {
 
     callPool()
@@ -87,18 +149,15 @@ function DetailStaking() {
     if(wallet===""){
 
     } else {
-      
-      // const tonBalance = 
-      // const tonweb = new TonWeb();
+
       const tonweb = new TonWeb(new TonWeb.HttpProvider('https://toncenter.com/api/v2/jsonRPC', {apiKey: '8c4c5ef79ae30a1657c4f3315dd1339b36868c1f4ec7bb39ddaa6af02a6d7218'}));
       const balance = await tonweb.getBalance(wallet);
 
-      // getJettonBalance("UQCeHendv97uqK8bU0I2xiRPVuWFMiHviEZKIwJUMl_CKLbd", "EQDNhy-nxYFgUqzfUzImBEP67JqsyMIcyk2S5_RwNNEYku0k")
-      // const { JettonMinter, JettonWallet } = tonweb.token.jetton;
-      // const data = await jettonWallet.getData();
-
+      const apiRes = await axios.get(`https://tonapi.io/v2/accounts/${wallet}/jettons/0%3Ab113a994b5024a16719f69139328eb759596c38a25f59028b146fecdc3621dfe?currencies=usd`)
+      const usdtBalance = Number(apiRes.data.balance)/1e+6  
+      
       let tempBalance = {
-        "walletUSDT": 0,
+        "walletUSDT": usdtBalance.toFixed(2),
         "walletTON": balance/1e+9,
         "investedUSDT": 0,
         "investedTON":0
@@ -106,7 +165,7 @@ function DetailStaking() {
 
       setBalance(tempBalance)
 
-      console.log("balance",balance/1e+9)
+      // console.log("balance",balance/1e+9)
     }
 
 
@@ -138,12 +197,6 @@ function DetailStaking() {
     return numberWithCommas;
 
   }
-
-  // const [tonConnectUI, setOptions] = useTonConnectUI();
-  // const wallet = useTonAddress();
-  // const dex = new DEX.v1.Router({
-  //   tonApiClient: new TonWeb.HttpProvider(),
-  // });
 
   const selectionDeposit = () => {
     setSelection("deposit")
@@ -186,7 +239,7 @@ function DetailStaking() {
       askJettonAddress: 'EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO', // for a STON
       minAskAmount: TonWeb.utils.toNano('0.1'), // but not less than 0.1 STON
       proxyTonAddress: pTON.v1.address.toString(),
-      userWalletAddress: wallet,
+      userWalletAddress: wallet
     });
 
     await tonConnectUI.sendTransaction({
@@ -201,12 +254,20 @@ function DetailStaking() {
         },
       ],
     });
+
   }
+
+  // const [tonConnectUI, setOptions] = useTonConnectUI();
+  // const wallet = useTonAddress();
+  // const dex = new DEX.v1.Router({
+  //   tonApiClient: new TonWeb.HttpProvider(),
+  // });
+
 
 
   return (
     <>
-      <div class="p-4">
+      <div class="p-4 bg-gray-100">
         <OverBox>
           <SubTemplateBlockVertical>
             <ManageTitle>
@@ -254,7 +315,6 @@ function DetailStaking() {
             <div style={{marginTop:"10px"}}></div>
               <div class="sm:px-0">        
               <div className="border border-gray-100 rounded-lg p-6 bg-white">
-              <div className="">
                 <div className="grid grid-cols-3 gap-3 text-right text-sm">
                   <p className="font-semibold col-span-1">Wallet</p>
                   <p className="font-neutral col-span-1">{balance.walletUSDT} USDT</p>
@@ -263,97 +323,60 @@ function DetailStaking() {
                   <p className="font-neutral col-span-1">{balance.investedUSDT} USDT</p>
                   <p className="text-neutral-600 col-span-1">{balance.investedTON} TON</p>
                 </div>              
-              </div>             
 
               </div> 
 
               <div style={{marginTop:"20px"}}></div>
               <div className="border border-gray-100 rounded-lg p-5" style={{"backgroundColor":"white"}}>
-              <div style={{marginTop:"10px"}}></div>
 
-              {true ? 
-
-              <ul class="text-sm font-medium text-center text-gray-400 divide-x divide-blue-200 border border-gray-200 rounded-lg flex dark:divide-blue-700 dark:text-blue-400">
+              <ul class="mb-5 text-sm font-medium text-center text-gray-400 divide-x divide-blue-200 border border-gray-200 rounded-lg flex dark:divide-blue-700 dark:text-blue-400">
                   <li class="w-full">
                       <a href="#" class="inline-block w-full p-2 text-blue-600 bg-blue-100 rounded-l-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                        deposit
+                        LP Provide
                       </a>
                   </li>
                   <li class="w-full">
                       <a href="#" class="inline-block w-full p-2 bg-white rounded-r-lg hover:text-blue-700 hover:bg-blue-50 focus:ring-1 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-blue-800 dark:hover:bg-blue-700">
-                        withdrawal
+                        Lp Farming
                       </a>
                   </li>
               </ul>
-              :
-              <ul class="text-sm font-medium text-center text-gray-400 divide-x divide-blue-200 border border-gray-300 rounded-lg flex dark:divide-blue-700 dark:text-blue-400">
-              <li class="w-full">
-                  <a  href="#" class="inline-block w-full p-2 text-gray bg-white rounded-l-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                   deposit
-                  </a>
-              </li>
-              <li class="w-full">
-                  <a href="#" class="inline-block w-full p-2 text-blue-600 bg-blue-100 rounded-r-lg hover:text-blue-700 hover:bg-blue-50 focus:ring-1 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-blue-800 dark:hover:bg-blue-700">
-                  withdrawal
-                  </a>
-              </li>
-              </ul>
-              }
 
-          <div style={{marginTop:"20px"}}></div>
-              <div className="pt-1">
-              <div style={{marginTop:"10px"}}></div>
-              <div class="items-center">   
-                                
-                  <div class="relative w-full">
-                      {selection === "deposit" ? 
-                      <>
-                        <div class="relative">
-                            <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                            </div>
-                            <input type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required  />
-                            <button onClick={maxDepositHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
-                        </div>
-                      </>
-                      :
-                      <>
-                        <div class="relative">
-                          <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                          </div>
-                          <input type="number" value={withdrawalAmount} onChange={e => setWithdrawalAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
-                            <button onClick={maxWithdrawerHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button>
-                          </div>
-                      </>
-                    }
-                  </div>              
+              <div class="relative">
+                  <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+                  </div>
+                  <input placeholder="USDT" type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required  />
+                  {/* <button onClick={maxDepositHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button> */}
               </div>
+             
+              <div className="border border-gray-200 rounded-lg pr-5 pb-5 mt-5 bg-white">
+                <div className="grid grid-cols-3 gap-3 text-right text-sm pt-5">
+                 <p className="font-semibold col-span-1">After Swap</p>
+                  <p className="font-neutral col-span-1">{afterSwap.USDT} USDT</p>
+                  <p className="text-neutral-600 col-span-1">{afterSwap.TON.toFixed(2)} TON</p>
+                </div>   
+              </div>
+             
+              <div className="pt-1">
+
 
           <div style={{marginTop:"20px"}}></div>
             <div style={{textAlign:"right"}}>
               <div style={{marginTop:"30px"}}></div>
                 
-                {true !== "" ?
+                {wallet === "" ?
                     <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                       <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
                         Connect Wallet
                       </span>
                     </button>
                     :
-                    true ?
-                     <button class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
-                          variant="solid"
-                          color="slate"
-                          onClick={sendTon}>
-                                Confirm
-                    </button>
-
-                    
-                    :
-                    <button style={{width:"100%", height:"50px"}} type="submit" class="py-2.5 px-3 text-sm font-medium text-white bg-gray-500 rounded-lg hover:bg-blue-800 focus:ring-2 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                      <span style={{width:"30px", fontWeight:"700", fontSize:"15px"}}>
-                        Submit
-                      </span>
-                    </button>
+                    <button class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white"
+                    variant="solid"
+                    color="slate"
+                    onClick={sendTon}>
+                          Confirm
+                  </button>
                   }
               </div>
             </div>
