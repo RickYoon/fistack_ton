@@ -8,7 +8,7 @@ import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
 import TonWeb from "tonweb";
 
 import { DEX, pTON } from "@ston-fi/sdk";
-// import { StonApiClient } from '@ston-fi/api';
+import { StonApiClient } from '@ston-fi/api';
 
 
 let iconUrl = {
@@ -78,25 +78,25 @@ function DetailStaking() {
 
     if(depositAmount>0){
 
-      // const client = new StonApiClient();
+      const client = new StonApiClient();
 
-      // const simulateReture = await client.simulateSwap({
-      //   "askAddress":"EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c",
-      //   "offerAddress":"EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
-      //   "offerUnits": ((depositAmount/2)*1e+6).toString(),
-      //   "slippageTolerance":"0.01",
-      //   "referralAddress": "UQCeHendv97uqK8bU0I2xiRPVuWFMiHviEZKIwJUMl_CKLbd"
-      // })
+      const simulateReture = await client.simulateSwap({
+        "askAddress":"EQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAM9c",
+        "offerAddress":"EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+        "offerUnits": ((depositAmount/2)*1e+6).toString(),
+        "slippageTolerance":"0.01",
+        "referralAddress": "UQCeHendv97uqK8bU0I2xiRPVuWFMiHviEZKIwJUMl_CKLbd"
+      })
 
-      // let tempRes = {
-      //   "USDT": 0,
-      //   "TON": 0
-      // }
+      let tempRes = {
+        "USDT": 0,
+        "TON": 0
+      }
 
-      // tempRes["USDT"] = depositAmount / 2;
-      // tempRes["TON"] = simulateReture.askUnits/(1e+9);
+      tempRes["USDT"] = depositAmount / 2;
+      tempRes["TON"] = simulateReture.askUnits/(1e+9);
 
-      // setAfterSwap(tempRes)
+      setAfterSwap(tempRes)
 
       // console.log("simulateReture",(simulateReture.askUnits/(1e+9)))
 
@@ -430,9 +430,10 @@ function DetailStaking() {
                         <ul class="my-4 space-y-3">
                             <li>
                                 <div class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg bg-gray-50">
-                                <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                <div class="w-6 h-6 ml-2">-</div>
+                                {/* <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
-                                </svg>
+                                </svg> */}
                                   Swap {afterSwap.USDT} USDT to {afterSwap.TON} TON                                  
                                 </div>
                             </li>
