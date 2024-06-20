@@ -32,14 +32,13 @@ function DetailStaking() {
     "TON": 0
   })
 
+  const [lpstate, setLpstate] = useState(0)
+
 
   const [tonConnectUI, setOptions] = useTonConnectUI();
   const [depositmodal, setDepositmodal]= useState(false)
-  const [amount, setAmount]= useState()
-  const [maxAmount, setMaxAmount]= useState(0)
-  const [selection, setSelection] = useState("deposit")
+  const [selection, setSelection] = useState("lpProvide")
   const [depositAmount, setDepositAmount] = useState(NaN)
-  const [withdrawalAmount, setWithdrawalAmount] = useState(NaN)
 
   const wallet = useTonAddress();
 
@@ -205,8 +204,8 @@ function DetailStaking() {
 
   }
 
-  const selectionDeposit = () => {
-    setSelection("deposit")
+  const selectionLpProvide = () => {
+    setSelection("lpProvide")
   }
 
   const selectionWithdrawler = () => {
@@ -237,6 +236,9 @@ function DetailStaking() {
 
   async function swapTrx(){
 
+    try {
+     
+
     const dex = new DEX.v1.Router({
       tonApiClient: new TonWeb.HttpProvider(),
     });
@@ -249,7 +251,8 @@ function DetailStaking() {
       userWalletAddress: wallet
     });
 
-    await tonConnectUI.sendTransaction({
+
+    const responseTx = await tonConnectUI.sendTransaction({
       validUntil: Date.now() + 1000000,
       messages: [
         {
@@ -261,6 +264,18 @@ function DetailStaking() {
         },
       ],
     });
+
+    console.log("responseTx", responseTx)
+    setLpstate(1)
+
+  } catch (error) {
+      
+    console.log("error", error)
+    // alert("Transaction Fail")
+    setLpstate(1)
+
+  }
+
 
   }
 
@@ -337,16 +352,33 @@ function DetailStaking() {
               <div className="border border-gray-100 rounded-lg p-5" style={{"backgroundColor":"white"}}>
 
               <ul class="mb-5 text-sm font-medium text-center text-gray-400 divide-x divide-blue-200 border border-gray-200 rounded-lg flex dark:divide-blue-700 dark:text-blue-400">
+                  {selection === "lpProvide" ?
+                  <>
                   <li class="w-full">
-                      <a href="#" class="inline-block w-full p-2 text-blue-600 bg-blue-100 rounded-l-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                        LP Provide
-                      </a>
+                      <div onClick={()=>setSelection("lpProvide")} class="cursor-pointer inline-block w-full p-2 text-blue-600 bg-blue-100 rounded-l-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
+                        Liquidity Provide
+                      </div>
                   </li>
                   <li class="w-full">
-                      <a href="#" class="inline-block w-full p-2 bg-white rounded-r-lg hover:text-blue-700 hover:bg-blue-50 focus:ring-1 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-blue-800 dark:hover:bg-blue-700">
-                        Lp Farming
-                      </a>
+                      <div onClick={()=>setSelection("Farming")} class="cursor-pointer inline-block w-full p-2 bg-white rounded-l-lg hover:text-blue-700 hover:bg-blue-50 focus:ring-1 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-blue-800 dark:hover:bg-blue-700">
+                        Farming
+                      </div>
                   </li>
+                  </>
+                  :
+                  <>
+                  <li class="w-full">
+                      <div onClick={()=>setSelection("lpProvide")} class="cursor-pointer inline-block w-full p-2 bg-white rounded-r-lg hover:text-blue-700 hover:bg-blue-50 focus:ring-1 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-blue-800 dark:hover:bg-blue-700">
+                        Liquidity Provide
+                      </div>
+                  </li>
+                  <li class="w-full">
+                      <div onClick={()=>setSelection("Farming")} class="cursor-pointer inline-block w-full p-2 text-blue-600 bg-blue-100 rounded-r-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
+                        Farming
+                      </div>
+                  </li>
+                  </>
+                  }
               </ul>
 
               <div class="relative">
@@ -397,10 +429,10 @@ function DetailStaking() {
           <div className="bg-white p-6 border border-gray-100 rounded-lg mx-auto">
             <h2 className="text-xl font-bold text-center mb-4">How Does it Work?</h2>
             <p className="text-base mb-2">
-            Deposit into the <span className="font-bold">USDT Lending Earn Strategy</span>, you will be investing your <span className="font-bold">USDT</span> into a <span className="font-bold">EVAA Lending Contract</span>.
+              Deposit into the <span className="font-bold">STON-Fi LP Farming Strategy</span>, you will be investing your <span className="font-bold">LP tokens</span> into a <span className="font-bold">STON-Fi Farming Contract</span>.
             </p>
             <p className="text-base mb-2">
-              EVAA pays to deposits in the <span className="font-bold">USDT Supply Rate</span> the shown APY continuously on every block. You can deposit as much as you want and withdraw at any moment. There are no lock-ups and no fees for using.
+              STON-Fi pays rewards based on the farming APY shown, continuously on every block. You can deposit as much as you want and withdraw at any moment. There are no lock-ups and no fees for using the service.
             </p>
           </div>
             </SubTemplateBlockVertical>
@@ -429,19 +461,31 @@ function DetailStaking() {
                     {/* <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Insert Deposit Amount</p> */}
                         <ul class="my-4 space-y-3">
                             <li>
-                                <div class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg bg-gray-50">
+                              {lpstate === 0 ?
+                                <div class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg border border-gray-200">
                                 <div class="w-6 h-6 ml-2">-</div>
                                 {/* <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg> */}
-                                  Swap {afterSwap.USDT} USDT to {afterSwap.TON} TON                                  
+                                  Swap {afterSwap.USDT} USDT to {afterSwap.TON.toFixed(5)} TON                                  
                                 </div>
-                            </li>
-                            <li>
-                                <div class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg bg-gray-50">
+                                :
+                                <div class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg bg-gray-200 border border-gray-200">
+                                {/* <div class="w-6 h-6 ml-2">-</div> */}
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
+                                  Swap {afterSwap.USDT} USDT to {afterSwap.TON.toFixed(5)} TON                                  
+                                </div>
+                              }
+
+                            </li>
+                            <li>
+                            <div class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg bg-white border border-gray-200">
+                                <div class="w-6 h-6 ml-2">-</div>
+                                {/* <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                </svg> */}
 
                                   Provide Liquidity                                  
                                 </div>
@@ -452,9 +496,15 @@ function DetailStaking() {
                         {/* <label for="search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">0x123...</label> */}
 
                         <div class="mt-10"></div>
+                        {lpstate === 0 ? 
                         <button onClick={swapTrx} class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
-                            <div style={{textAlign:"center"}}>Execution</div>
-                        </button>                    
+                            <div style={{textAlign:"center"}}>SWAP</div>
+                        </button>     
+                        :
+                        <button onClick={swapTrx} class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+                            <div style={{textAlign:"center"}}>LP Provide</div>
+                        </button>              
+                        }
                         
                     </div>
                     
