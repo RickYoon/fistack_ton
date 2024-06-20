@@ -121,25 +121,27 @@ function Products({ select, setSelect }) {
             {category === "simple" ? 
             <>
               <div class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center">
-                Simple
+                Single
               </div>
                 <div onClick={()=>setCategory("pro")} class="hover:cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-400 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-400 dark:text-blue-400 border border-gray-300 inline-flex items-center justify-center">
-                Pro
+                Combine
               </div>
             </>
           :
           <>
             <div onClick={()=>setCategory("simple")} class="hover:cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-400 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-400 dark:text-blue-400 border border-gray-300 inline-flex items-center justify-center">
-              Simple
+              Single
             </div>
               <div class="bg-blue-100 hover:bg-blue-200 text-blue-800 text-xm font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400 inline-flex items-center justify-center">
-              Pro
+              Combine
             </div>
           </>
           }
           </div>
         </div>
 
+        {category === "simple" ?       
+        <>  
         {poolInfos.map((poolinfo)=>
         <div className="border border-gray-200 rounded-lg pt-6 pb-6 bg-white mt-10">
           {poolinfo.type==="LP farming" ?          
@@ -181,9 +183,42 @@ function Products({ select, setSelect }) {
 
         </div>
         )}
+        </>
+        :
+          <div className="border border-gray-200 rounded-lg p-5 bg-white mt-10">
+            <Link to="/detail/deltaNeutral/0001">
+            <div className="flex justify-evenly">
+                <div className="flex">
+                <div className="relative">
+                    <div className="relative mr-1.5 rounded-full bg-white">
+                      <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                      <img src={"https://img.cryptorank.io/coins/ston_fi1715854233885.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="relative mr-1.5 rounded-full bg-white">
+                    <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
+                    <img src={"https://icons.llamao.fi/icons/protocols/storm-trade?w=48&h=48"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
+                    </div>
+                  </div>
+
+                </div>
+                <div className="flex flex-col">
+                  <div className="flex flex-row items-center">
+                    <p className="mx-4 text-xm font-bold text-neutral-800">Delta Neutral</p>
+                  </div>
+                  <div className="flex text-xm mx-4">
+                    StonFi + Storm
+                  </div>
+                </div>  
+                <p className="text-base text-neutral-800">66.21%</p>
+              </div>                  
+            </Link>
+          </div>
+        }
 
 
-        {category === "simple" ? 
+        {/* {category === "simple" ? 
         <>
             <div className="border border-gray-200 rounded-lg p-6 bg-white mt-10">
                   <Link to="/detail/0xae78736Cd615f374D3085123A210448E74Fc6393">
@@ -307,39 +342,10 @@ function Products({ select, setSelect }) {
                   </Link>
                 </div>
 
-                <div className="border border-gray-200 rounded-lg p-5 bg-white mt-5">
-                  <Link to="/detail/deltaNeutral">
-                  <div className="flex justify-evenly">
-                      <div className="flex">
-                      <div className="relative">
-                          <div className="relative mr-1.5 rounded-full bg-white">
-                            <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
-                            <img src={"https://img.cryptorank.io/coins/ston_fi1715854233885.png"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="relative mr-1.5 rounded-full bg-white">
-                          <div className="w-10 h-10 rounded-full" style={{ borderColor: 'rgb(204, 204, 204)' }}>
-                          <img src={"https://icons.llamao.fi/icons/protocols/storm-trade?w=48&h=48"} alt="-" style={{width:"60px", borderRadius:"50%"}}/>
-                          </div>
-                        </div>
-
-                      </div>
-                      <div className="flex flex-col">
-                        <div className="flex flex-row items-center">
-                          <p className="mx-4 text-xm font-bold text-neutral-800">Delta Neutral</p>
-                        </div>
-                        <div className="flex text-xm mx-4">
-                          StonFi + Storm
-                        </div>
-                      </div>  
-                      <p className="text-base text-neutral-800">66.21%</p>
-                    </div>                  
-                  </Link>
-                </div>
+                
 
                 </>
-            }
+            } */}
 
 
 

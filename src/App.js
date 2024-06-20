@@ -7,6 +7,7 @@ import TopNavLanding from "component/topNavLanding"
 import Landing from "pages/Landing"
 import Detail from "pages/Detail"
 import DetailLP from "pages/DetailLP"
+import DetailDeltaNeutral from "pages/DetailDeltaNeutral"
 
 // import ProductsPage from "pages/ProductsPage"
 
@@ -25,12 +26,14 @@ function MyApp() {
             <Route path="/products" element={<TopNavLanding />} />
             <Route path="/detail/:id" element={<TopNavLanding />} />
             <Route path="/detail/lpfarming/:id" element={<TopNavLanding />} />
+            <Route path="/detail/deltaneutral/:id" element={<TopNavLanding />} />
           </Routes>
           
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/detail/:id" element={<Detail />} />
             <Route path="/detail/lpfarming/:id" element={<DetailLP />} />
+            <Route path="/detail/deltaneutral/:id" element={<DetailDeltaNeutral />} />
           </Routes>       
       </Router>
       {/* <Footer /> */}

@@ -1,0 +1,31 @@
+{
+  "0001": {
+    "poolName": "Simple Earn (EVAA)",
+    "poolType": "Lending",
+    "poolToken": "USDT",
+    "apr": 18.9
+  },
+  "0002": {
+    "poolName": "stonfi + Storm",
+    "poolType": "Delta-neutral",
+    "poolToken": "USDT",
+    "apr": 31.5
+  },
+  "0003": {
+    "poolName": "stonfi Swap + Storm Position",
+    "poolType": "Delta-neutral",
+    "poolToken": "USDT",
+    "info": {
+      "operation": "ozys",
+      "startDate": "2023년 01년 02일",
+      "hackingHistory": "0회",
+      "auditPerformed": "수행함"
+    },
+    "manage": {
+      "connected": true,
+      "deposit": true,
+      "withdrawl": true,
+      "swap": true
+    }
+  }
+}
