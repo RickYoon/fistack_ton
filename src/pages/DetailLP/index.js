@@ -45,6 +45,7 @@ function DetailStaking() {
   const [deltaAmount, setDeltaAmount] = useState(0);
   const [longAmount, setLongAmount] = useState(0);
   const [shortAmount, setShortAmount] = useState(0);
+  const [refTonPrice, setRefTonPrice] = useState(0);
 
   const [poolInfos, setPoolInfos] = useState([
     {
@@ -94,6 +95,8 @@ function DetailStaking() {
 
       tempRes["USDT"] = depositAmount / 2;
       tempRes["TON"] = simulateReture.askUnits/(1e+9);
+
+      setRefTonPrice((depositAmount / 2) / (simulateReture.askUnits/(1e+9)))
 
       setAfterSwap(tempRes)
 
@@ -236,43 +239,57 @@ function DetailStaking() {
 
   async function swapTrx(){
 
-    try {
-     
+    try {     
 
-    const dex = new DEX.v1.Router({
-      tonApiClient: new TonWeb.HttpProvider(),
-    });
-    
-    const swapTxParams = await dex.buildSwapTonToJettonTxParams({
-      offerAmount: TonWeb.utils.toNano('1'), // swap 1 TON
-      askJettonAddress: 'EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO', // for a STON
-      minAskAmount: TonWeb.utils.toNano('0.1'), // but not less than 0.1 STON
-      proxyTonAddress: pTON.v1.address.toString(),
-      userWalletAddress: wallet
-    });
+      const dex = new DEX.v1.Router({
+        tonApiClient: new TonWeb.HttpProvider(),
+      });
 
+      console.log("ref", refTonPrice)
+      console.log("after", afterSwap.USDT)
 
-    const responseTx = await tonConnectUI.sendTransaction({
-      validUntil: Date.now() + 1000000,
-      messages: [
-        {
-          address: swapTxParams.to.toString(),
-          amount: swapTxParams.gasAmount.toString(),
-          payload: TonWeb.utils.bytesToBase64(
-            await swapTxParams.payload.toBoc(),
-          ),
-        },
-      ],
-    });
+      console.log("input1", afterSwap.USDT.toString())
+      console.log("input2", (afterSwap.USDT * refTonPrice/10000).toFixed(8))
 
-    console.log("responseTx", responseTx)
-    setLpstate(1)
+      
+      const swapTxParams = await dex.buildSwapTonToJettonTxParams({
+        userWalletAddress: wallet,
+        offerAmount: TonWeb.utils.toNano(afterSwap.USDT.toString()), // swap 1 TON
+        askJettonAddress: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs', // for a STON
+        minAskAmount: TonWeb.utils.toNano((refTonPrice/10000).toFixed(8)), // but not less than 0.1 STON
+        proxyTonAddress: pTON.v1.address.toString()
+      });
+
+      // swap 1 GEMSTON to TON but not less than 1 nano TON
+      // const swapTxParams = await dex.buildSwapJettonToTonTxParams({
+      //   userWalletAddress: wallet, // ! replace with your address
+      //   offerAmount: new TonWeb.utils.BN("100000000"),
+      //   offerJettonAddress: "EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO", // STON
+      //   proxyTonAddress: pTON.v1.address,
+      //   minAskAmount: new TonWeb.utils.BN("1")
+      // });
+
+      const responseTx = await tonConnectUI.sendTransaction({
+        validUntil: Date.now() + 1000000,
+        messages: [
+          {
+            address: swapTxParams.to.toString(),
+            amount: swapTxParams.gasAmount.toString(),
+            payload: TonWeb.utils.bytesToBase64(
+              await swapTxParams.payload.toBoc(),
+            ),
+          },
+        ],
+      });
+
+      console.log("responseTx", responseTx)
+      setLpstate(1)
 
   } catch (error) {
       
     console.log("error", error)
     // alert("Transaction Fail")
-    setLpstate(1)
+    // setLpstate(1)
 
   }
 
@@ -356,12 +373,12 @@ function DetailStaking() {
                   <>
                   <li class="w-full">
                       <div onClick={()=>setSelection("lpProvide")} class="cursor-pointer inline-block w-full p-2 text-blue-600 bg-blue-100 rounded-l-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                        Liquidity Provide
+                        From USDT
                       </div>
                   </li>
                   <li class="w-full">
                       <div onClick={()=>setSelection("Farming")} class="cursor-pointer inline-block w-full p-2 bg-white rounded-l-lg hover:text-blue-700 hover:bg-blue-50 focus:ring-1 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-blue-800 dark:hover:bg-blue-700">
-                        Farming
+                        From TON
                       </div>
                   </li>
                   </>
@@ -369,12 +386,12 @@ function DetailStaking() {
                   <>
                   <li class="w-full">
                       <div onClick={()=>setSelection("lpProvide")} class="cursor-pointer inline-block w-full p-2 bg-white rounded-r-lg hover:text-blue-700 hover:bg-blue-50 focus:ring-1 focus:outline-none focus:ring-blue-300 dark:hover:text-white dark:bg-blue-800 dark:hover:bg-blue-700">
-                        Liquidity Provide
+                        From USDT
                       </div>
                   </li>
                   <li class="w-full">
                       <div onClick={()=>setSelection("Farming")} class="cursor-pointer inline-block w-full p-2 text-blue-600 bg-blue-100 rounded-r-lg focus:ring-1 focus:ring-blue-300 active focus:outline-none dark:bg-blue-700 dark:text-white">
-                        Farming
+                        From TON
                       </div>
                   </li>
                   </>
@@ -384,15 +401,27 @@ function DetailStaking() {
               <div class="relative">
                   <div class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
                   </div>
+                  {selection === "lpProvide" ?
                   <input placeholder="USDT" type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required  />
-                  {/* <button onClick={maxDepositHandler}  class="text-white absolute right-2.5 bottom-2.5 bg-blue-500 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Max</button> */}
+                  :
+                  <input placeholder="TON" type="number" value={depositAmount} onChange={e => setDepositAmount(e.target.value)} class="block p-4 w-full text-sm text-gray-900 bg-white rounded-lg border border-gray-200 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-100 dark:placeholder-gray-100 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required  />
+                  }
               </div>
              
               <div className="border border-gray-200 rounded-lg pr-5 pb-5 mt-5 bg-gray-100">
                 <div className="grid grid-cols-3 gap-3 text-center text-sm pt-5">
-                 <p className="font-semibold col-span-1">After Swap</p>
+                  <p className="font-semibold col-span-1">After Swap</p>
+                  {selection === "lpProvide" ?
+                  <>
                   <p className="font-neutral col-span-1">{afterSwap.USDT} USDT</p>
                   <p className="text-neutral-600 col-span-1">{afterSwap.TON.toFixed(2)} TON</p>
+                  </>
+                  :
+                  <>
+                  <p className="font-neutral col-span-1">{afterSwap.USDT} TON</p>
+                  <p className="text-neutral-600 col-span-1">{(refTonPrice * afterSwap.USDT).toFixed(2)} USDT</p>
+                  </>
+                  }
                 </div>   
               </div>
              
@@ -467,7 +496,8 @@ function DetailStaking() {
                                 {/* <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg> */}
-                                  Swap {afterSwap.USDT} USDT to {afterSwap.TON.toFixed(5)} TON                                  
+                                  SWAP for liquidity ratio
+                                  {/* Swap {afterSwap.USDT} USDT to {afterSwap.TON.toFixed(5)} TON                                   */}
                                 </div>
                                 :
                                 <div class="flex items-center p-3 text-base font-medium text-gray-900 rounded-lg bg-gray-200 border border-gray-200">
@@ -475,7 +505,9 @@ function DetailStaking() {
                                 <svg class="w-6 h-6 text-gray-800 dark:text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                                 </svg>
-                                  Swap {afterSwap.USDT} USDT to {afterSwap.TON.toFixed(5)} TON                                  
+                                SWAP for liquidity ratio
+
+                                  {/* Swap {afterSwap.USDT} USDT to {afterSwap.TON.toFixed(5)} TON                                   */}
                                 </div>
                               }
 
