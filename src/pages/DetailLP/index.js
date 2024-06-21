@@ -306,7 +306,7 @@ function DetailStaking() {
         router.buildProvideLiquidityTonTxParams({
           userWalletAddress: USER_WALLET_ADDRESS,
           proxyTonAddress: pTON_ADDRESS,
-          sendAmount: new TonWeb.utils.BN("900000000"),
+          sendAmount: new TonWeb.utils.BN("300000000"),
           otherTokenAddress: JETTON_0_ADDRESS,
           minLpOut: new TonWeb.utils.BN("1"),
           queryId: 12345,
@@ -316,7 +316,7 @@ function DetailStaking() {
         router.buildProvideLiquidityJettonTxParams({
           userWalletAddress: USER_WALLET_ADDRESS,
           sendTokenAddress: JETTON_0_ADDRESS,
-          sendAmount: new TonWeb.utils.BN("6419000"),
+          sendAmount: new TonWeb.utils.BN("1120000"),
           otherTokenAddress: pTON_ADDRESS,
           minLpOut: new TonWeb.utils.BN("1"),
           queryId: 123456,
