@@ -32,7 +32,7 @@ function DetailStaking() {
     "TON": 0
   })
 
-  const [lpstate, setLpstate] = useState(0)
+  const [lpstate, setLpstate] = useState(1)
 
 
   const [tonConnectUI, setOptions] = useTonConnectUI();
@@ -260,15 +260,6 @@ function DetailStaking() {
         proxyTonAddress: pTON.v1.address.toString()
       });
 
-      // swap 1 GEMSTON to TON but not less than 1 nano TON
-      // const swapTxParams = await dex.buildSwapJettonToTonTxParams({
-      //   userWalletAddress: wallet, // ! replace with your address
-      //   offerAmount: new TonWeb.utils.BN("100000000"),
-      //   offerJettonAddress: "EQA2kCVNwVsil2EM2mB0SkXytxCqQjS4mttjDpnXmwG9T6bO", // STON
-      //   proxyTonAddress: pTON.v1.address,
-      //   minAskAmount: new TonWeb.utils.BN("1")
-      // });
-
       const responseTx = await tonConnectUI.sendTransaction({
         validUntil: Date.now() + 1000000,
         messages: [
@@ -296,12 +287,84 @@ function DetailStaking() {
 
   }
 
-  // const [tonConnectUI, setOptions] = useTonConnectUI();
-  // const wallet = useTonAddress();
-  // const dex = new DEX.v1.Router({
-  //   tonApiClient: new TonWeb.HttpProvider(),
-  // });
+  async function provideLiquidity(){
 
+    try {     
+
+
+      const USER_WALLET_ADDRESS = wallet; // ! replace with your address
+      const JETTON_0_ADDRESS = "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs"; // STON
+      const pTON_ADDRESS = pTON.v1.address;
+      
+      const router = new DEX.v1.Router({
+        tonApiClient: new TonWeb.HttpProvider('https://toncenter.com/api/v2/jsonRPC', {apiKey: '8c4c5ef79ae30a1657c4f3315dd1339b36868c1f4ec7bb39ddaa6af02a6d7218'}),
+      });
+      
+      
+      const txsParams = await Promise.all([
+        // deposit 1 TON to the STON/TON pool and get at least 1 nano LP token
+        router.buildProvideLiquidityTonTxParams({
+          userWalletAddress: USER_WALLET_ADDRESS,
+          proxyTonAddress: pTON_ADDRESS,
+          sendAmount: new TonWeb.utils.BN("900000000"),
+          otherTokenAddress: JETTON_0_ADDRESS,
+          minLpOut: new TonWeb.utils.BN("1"),
+          queryId: 12345,
+        }),
+
+        // deposit 5 STON to the STON/TON pool and get at least 1 nano LP token
+        router.buildProvideLiquidityJettonTxParams({
+          userWalletAddress: USER_WALLET_ADDRESS,
+          sendTokenAddress: JETTON_0_ADDRESS,
+          sendAmount: new TonWeb.utils.BN("6419000"),
+          otherTokenAddress: pTON_ADDRESS,
+          minLpOut: new TonWeb.utils.BN("1"),
+          queryId: 123456,
+        }),
+      ]);
+      
+      // To execute the transaction, you need to send a transaction to the blockchain.
+      // This code will be different based on the wallet you are using to send the tx from
+      // logging is used for demonstration purposes
+      txsParams.map((txParams) => console.log({
+        to: txParams.to,
+        amount: txParams.gasAmount,
+        payload: txParams.payload,
+      }));
+      
+      const responseTx = await tonConnectUI.sendTransaction({
+        validUntil: Date.now() + 1000000,
+        messages: [
+          {
+            address: txsParams[0].to.toString(),
+            amount: txsParams[0].gasAmount.toString(),
+            payload: TonWeb.utils.bytesToBase64(
+              await txsParams[0].payload.toBoc(),
+            ),
+          },
+          {
+            address: txsParams[1].to.toString(),
+            amount: txsParams[1].gasAmount.toString(),
+            payload: TonWeb.utils.bytesToBase64(
+              await txsParams[1].payload.toBoc(),
+            ),
+          }
+        ],
+      });
+
+      console.log("responseTx", responseTx)
+      setLpstate(1)
+
+  } catch (error) {
+      
+    console.log("error", error)
+    // alert("Transaction Fail")
+    // setLpstate(1)
+
+  }
+
+
+  }
 
 
   return (
@@ -410,7 +473,7 @@ function DetailStaking() {
              
               <div className="border border-gray-200 rounded-lg pr-5 pb-5 mt-5 bg-gray-100">
                 <div className="grid grid-cols-3 gap-3 text-center text-sm pt-5">
-                  <p className="font-semibold col-span-1">After Swap</p>
+                  <p className="font-semibold col-span-1">LP with Swap</p>
                   {selection === "lpProvide" ?
                   <>
                   <p className="font-neutral col-span-1">{afterSwap.USDT} USDT</p>
@@ -533,7 +596,7 @@ function DetailStaking() {
                             <div style={{textAlign:"center"}}>SWAP</div>
                         </button>     
                         :
-                        <button onClick={swapTrx} class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+                        <button onClick={provideLiquidity} class="w-full items-center p-3 text-white font-bold text-gray-900 rounded-lg bg-primary-500 hover:bg-primary-700 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
                             <div style={{textAlign:"center"}}>LP Provide</div>
                         </button>              
                         }
